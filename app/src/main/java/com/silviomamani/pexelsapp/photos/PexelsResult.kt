@@ -1,4 +1,4 @@
-package com.silviomamani.pexelsapp
+package com.silviomamani.pexelsapp.photos
 
 data class PexelsResult (
     val photos: List<Fotos>

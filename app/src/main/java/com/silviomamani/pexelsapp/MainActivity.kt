@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.google.gson.Gson
+import com.silviomamani.pexelsapp.ui.screens.NavigationStack
 import com.silviomamani.pexelsapp.ui.screens.pexelslist.PexelsListScreen
 import com.silviomamani.pexelsapp.ui.theme.PexelsAppTheme
 
@@ -19,9 +20,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             PexelsAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    PexelsListScreen(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    NavigationStack()
                 }
             }
         }

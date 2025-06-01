@@ -17,7 +17,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.silviomamani.pexelsapp.Fotos
+import com.silviomamani.pexelsapp.photos.Fotos
 
 @Composable
 fun PexelsUiItem(
