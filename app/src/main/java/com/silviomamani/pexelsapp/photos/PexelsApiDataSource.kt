@@ -29,8 +29,10 @@ class PexelsApiDataSource :IPexelsDataSource{
             emptyList()
 
         }
-
-
-
     }
+
+    override suspend fun getPexelsById(pexelsId: Int): Fotos {
+        return RetrofitInstance.pexelsApi.getFoto(pexelsId).photos
+    }
+
 }

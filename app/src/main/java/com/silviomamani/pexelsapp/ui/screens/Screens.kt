@@ -3,4 +3,5 @@ package com.silviomamani.pexelsapp.ui.screens
 sealed class Screens(val route: String) {
     object Splash : Screens("Splash")
     object PexelsList:Screens("pexels_list_screen")
+    object PexelsDetail: Screens("pexels_detail_screen")
 }

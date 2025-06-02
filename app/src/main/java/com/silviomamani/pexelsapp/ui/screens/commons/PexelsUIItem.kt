@@ -1,5 +1,6 @@
 package com.silviomamani.pexelsapp.ui.screens.commons
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,10 +23,14 @@ import com.silviomamani.pexelsapp.photos.Fotos
 @Composable
 fun PexelsUiItem(
     fotos: Fotos,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (Int) -> Unit
 ) {
     Card(
         modifier = modifier
+            .clickable {
+                onClick(fotos.id)
+            }
             .padding(8.dp)
             .fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),

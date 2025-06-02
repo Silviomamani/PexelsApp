@@ -10,13 +10,17 @@ import androidx.compose.ui.unit.dp
 import com.silviomamani.pexelsapp.photos.Fotos
 
 @Composable
-fun PexelsUIList(pexelsList: List<Fotos>, modifier: Modifier = Modifier) {
+fun PexelsUIList(
+    pexelsList: List<Fotos>,
+    modifier: Modifier = Modifier,
+    onClick:(Int) -> Unit
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = modifier.padding(8.dp)
     ) {
         items(pexelsList) { foto ->
-            PexelsUiItem(fotos = foto)
+            PexelsUiItem(fotos = foto, onClick = onClick)
         }
     }
 }

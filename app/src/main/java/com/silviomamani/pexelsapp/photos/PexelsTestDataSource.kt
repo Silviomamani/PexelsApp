@@ -16,6 +16,10 @@ class PexelsTestDataSource : IPexelsDataSource{
 
     }
 
+    override suspend fun getPexelsById(pexelsId: Int): Fotos {
+        return getPexelsList("")[0]
+    }
+
     private var json = """
     {
        "page": 1,

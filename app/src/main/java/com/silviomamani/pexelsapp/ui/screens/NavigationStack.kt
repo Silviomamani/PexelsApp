@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.silviomamani.pexelsapp.ui.screens.pexelsdetail.PexelsDetailScreen
 import com.silviomamani.pexelsapp.ui.screens.pexelslist.PexelsListScreen
 import com.silviomamani.pexelsapp.ui.screens.splash.SplashScreen
 
@@ -19,7 +20,13 @@ fun NavigationStack(){
             SplashScreen(navController = navController)
         }
         composable(route = Screens.PexelsList.route){
-            PexelsListScreen()
+            PexelsListScreen(navController = navController)
+
+        }
+        composable(route = Screens.PexelsDetail.route + "/{pexelsId}"){ it ->
+            var id = it.arguments?.getString("pexelsId")
+            val pexelsId = id?.toIntOrNull()
+           PexelsDetailScreen(pexelsId ?: 0)
 
         }
 

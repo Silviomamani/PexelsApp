@@ -1,5 +1,6 @@
 package com.silviomamani.pexelsapp.ui.screens.pexelslist
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.silviomamani.pexelsapp.ui.screens.Screens
 //import com.silviomamani.pexelsapp.getPexelsList
 import com.silviomamani.pexelsapp.ui.screens.commons.PexelsUIList
 import com.silviomamani.pexelsapp.ui.theme.PexelsAppTheme
@@ -24,7 +28,8 @@ import com.silviomamani.pexelsapp.ui.theme.PexelsAppTheme
 @Composable
 fun PexelsListScreen(
                      modifier: Modifier = Modifier,
-                     vm: PexelsListScreenViewModel = viewModel()
+                     vm: PexelsListScreenViewModel = viewModel(),
+                     navController: NavHostController
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -58,7 +63,11 @@ fun PexelsListScreen(
 
 
         Spacer(modifier = Modifier.height(12.dp))
-        PexelsUIList(vm.uiState.pexelsList,modifier.fillMaxSize())
+        PexelsUIList(vm.uiState.pexelsList,modifier.fillMaxSize(), onClick = {
+
+                id -> navController.navigate(Screens.PexelsDetail.route + "/${id}")
+
+        })
     }
 
 }
