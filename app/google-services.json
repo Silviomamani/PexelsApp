@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "90032945064",
+    "project_id": "pexelsapp2025",
+    "storage_bucket": "pexelsapp2025.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90032945064:android:69c37781f328474f204f9d",
+        "android_client_info": {
+          "package_name": "com.silviomamani.pexelsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90032945064-pshg91s2nkq33447iq74qofrd55bueaf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.silviomamani.pexelsapp",
+            "certificate_hash": "bbefaefb284dbf31a2346f382603c6f2658c433a"
+          }
+        },
+        {
+          "client_id": "90032945064-s39mtdqal71uc1dec2t139mahl78mrbc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAH1haP6PYuSD7mRdzKP2zBe2pebt9uZg0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90032945064-s39mtdqal71uc1dec2t139mahl78mrbc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PexelsApp</string>
+    <string name="default_web_client_id">90032945064-s39mtdqal71uc1dec2t139mahl78mrbc.apps.googleusercontent.com</string>
 </resources>

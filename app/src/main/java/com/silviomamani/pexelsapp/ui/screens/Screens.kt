@@ -4,4 +4,5 @@ sealed class Screens(val route: String) {
     object Splash : Screens("Splash")
     object PexelsList:Screens("pexels_list_screen")
     object PexelsDetail: Screens("pexels_detail_screen")
+    object Login: Screens ("login_screen")
 }

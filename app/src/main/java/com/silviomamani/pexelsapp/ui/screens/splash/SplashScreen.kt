@@ -34,7 +34,7 @@ fun SplashScreen(
     // Lanzar efecto al entrar a la pantalla
     LaunchedEffect(Unit) {
         delay(2000) // Espera 2 segundos
-        navController.navigate(Screens.PexelsList.route) {
+        navController.navigate(Screens.Login.route) {
             popUpTo("splash") { inclusive = true } // Elimina splash del backstack
         }
     }
