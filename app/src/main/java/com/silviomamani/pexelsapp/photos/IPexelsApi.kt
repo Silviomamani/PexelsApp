@@ -9,8 +9,8 @@ interface IPexelsApi {
     suspend fun getFotosSearch(
         @Query("query") search : String
     ) : PexelsResult
-    @GET("photos/{searchId}")
+    @GET("photos/{Id}")
     suspend fun getFoto(
-        @Path("searchId") pexelsId: Int
+        @Path("Id") pexelsId: Int
     ): FotoDetailResult
 }

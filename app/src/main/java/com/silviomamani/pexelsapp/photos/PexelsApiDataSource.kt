@@ -32,7 +32,7 @@ class PexelsApiDataSource :IPexelsDataSource{
     }
 
     override suspend fun getPexelsById(pexelsId: Int): Fotos {
-        return RetrofitInstance.pexelsApi.getFoto(pexelsId).photos
+        return RetrofitInstance.pexelsApi.getFoto(pexelsId)
     }
 
 }

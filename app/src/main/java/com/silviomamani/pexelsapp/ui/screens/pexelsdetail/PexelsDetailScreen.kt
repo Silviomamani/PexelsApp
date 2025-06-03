@@ -26,7 +26,7 @@ if (vm.uiState.pexelsDetail.id == 0 ){
 
 }
     else{
-        PexelsUiItem(vm.uiState.pexelsDetail, onClick = {id ->{}})
+        PexelsUIItemDetail(vm.uiState.pexelsDetail)
     }
 
 }

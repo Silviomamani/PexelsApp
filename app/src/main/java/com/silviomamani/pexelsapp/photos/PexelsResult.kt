@@ -4,9 +4,6 @@ data class PexelsResult (
     val photos: List<Fotos>
 )
 
-data class FotoDetailResult(
-    val photos: Fotos
-)
 
 data class Fotos(
     val id: Int,
@@ -18,9 +15,13 @@ data class Fotos(
 
 )
 data class ImagesJpg(
-    val original: String
+    val original: String,
+    val medium : String
 )
 
+typealias FotoDetailResult = Fotos
+
+
 fun emptyFotos(): Fotos{
-    return Fotos(0,"","",0,0,ImagesJpg(""))
+    return Fotos(0,"","",0,0,ImagesJpg("", ""))
 }
