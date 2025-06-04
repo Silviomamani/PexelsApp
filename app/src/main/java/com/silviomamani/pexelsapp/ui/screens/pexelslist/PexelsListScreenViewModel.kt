@@ -15,8 +15,11 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.silviomamani.pexelsapp.photos.Videos
 import com.silviomamani.pexelsapp.ui.screens.commons.PexelsItem
 import com.silviomamani.pexelsapp.ui.screens.commons.SearchType
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class PexelsListScreenViewModel (
     private val pexelsRepository: IPexelsRepository = PexelsRepository()
@@ -80,6 +83,35 @@ init{
 
     fun getUserName(){
         uiState =uiState.copy(searchQuery = uiState.searchQuery, pexelsList = uiState.pexelsList, username = FirebaseAuth.getInstance().currentUser?.displayName?: "Usuario")
+    }
+
+    private val _recommendedPhotos = MutableStateFlow<List<Fotos>>(emptyList())
+    val recommendedPhotos: StateFlow<List<Fotos>> = _recommendedPhotos
+
+    private val _recommendedVideos = MutableStateFlow<List<Videos>>(emptyList())
+    val recommendedVideos: StateFlow<List<Videos>> = _recommendedVideos
+
+
+    fun fetchRecommendedPhotos() {
+        viewModelScope.launch {
+            try {
+                val photos = pexelsRepository.fetchPexels("nature") // o cualquier término genérico
+                _recommendedPhotos.value = photos
+            } catch (e: IOException) {
+                Log.e("PexelsApp", "Error al recuperar fotos recomendadas: ${e.message}")
+            }
+        }
+    }
+
+    fun fetchRecommendedVideos() {
+        viewModelScope.launch {
+            try {
+                val videos = pexelsRepository.fetchPexelsVideos("popular") // puede ser "popular" o algo general
+                _recommendedVideos.value = videos
+            } catch (e: IOException) {
+                Log.e("PexelsApp", "Error al recuperar videos recomendados: ${e.message}")
+            }
+        }
     }
 }
 

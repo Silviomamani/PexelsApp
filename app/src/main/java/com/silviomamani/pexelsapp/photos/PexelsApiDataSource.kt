@@ -83,6 +83,40 @@ class PexelsApiDataSource :IPexelsDataSource{
             foto
         }
     }
+    override suspend fun getPopularFotos(): List<Fotos> {
+        Log.d("PexelsApp", "PexelsApiDataSource.getPopularFotos")
+        return try {
+            val result = RetrofitInstance.pexelsApi.getPopularFotos()
+            result.photos
+        } catch (e: HttpException) {
+            Log.e("PexelsApp", "HTTP error en getPopularFotos: ${e.code()} ${e.localizedMessage}")
+            emptyList()
+        } catch (e: IOException) {
+            Log.e("PexelsApp", "Network error en getPopularFotos: ${e.localizedMessage}")
+            emptyList()
+        } catch (e: Exception) {
+            Log.e("PexelsApp", "Unexpected error en getPopularFotos: ${e.localizedMessage}")
+            emptyList()
+        }
+    }
+
+    override suspend fun getPopularVideos(): List<Videos> {
+        Log.d("PexelsApp", "PexelsApiDataSource.getPopularVideos")
+        return try {
+            val result = RetrofitInstanceVideo.pexelsVideoApi.getPopularVideos()
+            result.videos
+        } catch (e: HttpException) {
+            Log.e("PexelsApp", "HTTP error en getPopularVideos: ${e.code()} ${e.localizedMessage}")
+            emptyList()
+        } catch (e: IOException) {
+            Log.e("PexelsApp", "Network error en getPopularVideos: ${e.localizedMessage}")
+            emptyList()
+        } catch (e: Exception) {
+            Log.e("PexelsApp", "Unexpected error en getPopularVideos: ${e.localizedMessage}")
+            emptyList()
+        }
+    }
+
 
 
 }

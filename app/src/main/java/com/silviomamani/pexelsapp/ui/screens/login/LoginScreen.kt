@@ -25,14 +25,14 @@ fun LoginScreen(
     vm: LoginScreenViewModel = viewModel()
 ){
     LaunchedEffect(Unit) {
-        vm.uiEvent.collect {
-            event ->
-            navController.navigate(Screens.PexelsList.route){
-            popUpTo(Screens.Login.route){ inclusive = true}
-        }
+        vm.uiEvent.collect { event ->
+            if (event == "LoginOK") {
+                navController.navigate(Screens.Home.route) {
+                    popUpTo(Screens.Login.route) { inclusive = true }
+                }
+            }
         }
     }
-
     Box(
         modifier = Modifier
             .fillMaxSize(),

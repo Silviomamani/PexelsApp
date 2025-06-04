@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import com.silviomamani.pexelsapp.ui.screens.homescreen.HomeScreen
 import com.silviomamani.pexelsapp.ui.screens.login.LoginScreen
 import com.silviomamani.pexelsapp.ui.screens.pexelsdetail.PexelsDetailScreen
 import com.silviomamani.pexelsapp.ui.screens.pexelslist.PexelsListScreen
@@ -28,6 +28,10 @@ fun NavigationStack(
 
         composable(route = Screens.Login.route){
             LoginScreen(onGoogleLoginClick, navController = navController)
+        }
+
+        composable(route = Screens.Home.route) {
+            HomeScreen(navController = navController, userName = "Silvio Mamani", onLogoutClick = onLogoutClick)
         }
         composable(route = Screens.PexelsList.route){
             PexelsListScreen(navController = navController, onLogoutClick = onLogoutClick)

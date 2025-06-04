@@ -28,6 +28,14 @@ class PexelsTestDataSource : IPexelsDataSource{
         TODO("Not yet implemented")
     }
 
+    override suspend fun getPopularFotos(): List<Fotos> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getPopularVideos(): List<Videos> {
+        TODO("Not yet implemented")
+    }
+
     private var json = """
     {
        "page": 1,
