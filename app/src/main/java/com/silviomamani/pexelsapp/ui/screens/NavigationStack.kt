@@ -38,6 +38,10 @@ fun NavigationStack(
            PexelsDetailScreen(pexelsId ?: 0)
 
         }
+        //composable(route = Screens.PexelsVideosDetail.route + "/{videoId}") { backStackEntry ->
+        //    val videoId = backStackEntry.arguments?.getString("videoId")?.toIntOrNull() ?: 0
+        //    PexelsVideoDetailScreen(videoId)
+        //}
 
     }
 }

@@ -1,5 +1,7 @@
 package com.silviomamani.pexelsapp.photos
 
+import com.google.gson.annotations.SerializedName
+
 data class PexelsResult (
     val photos: List<Fotos>
 )
@@ -25,3 +27,29 @@ typealias FotoDetailResult = Fotos
 fun emptyFotos(): Fotos{
     return Fotos(0,"","",0,0,ImagesJpg("", ""))
 }
+
+//Video
+
+data class PexelsVideoResult (
+    val videos: List<Videos>
+)
+data class Videos(
+    val id: Int = 0,
+    val width: Int = 0,
+    val height: Int = 0,
+    val duration: Int,
+    val user: User,
+    val image: String,
+    @SerializedName("video_files")
+    val videoFiles: List<VideoFile>
+
+)
+data class User(
+    val name: String,
+)
+data class VideoFile(
+    val id: Int,
+    val link: String,
+)
+
+typealias VideoDetailResult = Videos

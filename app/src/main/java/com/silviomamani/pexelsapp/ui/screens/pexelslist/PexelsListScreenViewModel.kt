@@ -15,6 +15,8 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.silviomamani.pexelsapp.ui.screens.commons.PexelsItem
+import com.silviomamani.pexelsapp.ui.screens.commons.SearchType
 
 class PexelsListScreenViewModel (
     private val pexelsRepository: IPexelsRepository = PexelsRepository()
@@ -25,24 +27,57 @@ class PexelsListScreenViewModel (
 init{
     getUserName()
 }
+    val combinedList: List<PexelsItem>
+        get() = when (uiState.searchType) {
+            SearchType.PHOTOS -> uiState.pexelsList.map { PexelsItem.PhotoItem(it) }
+            SearchType.VIDEOS -> uiState.pexelsVideosList.map { PexelsItem.VideoItem(it) }
+        }
     private var fetchJob: Job? = null
-    fun fetchFotos (){
+    fun fetchResults() {
+        when (uiState.searchType) {
+            SearchType.PHOTOS -> fetchFotos()
+            SearchType.VIDEOS -> fetchVideos()
+        }
+    }
+
+    fun fetchFotos() {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
-            try{
-                uiState = uiState.copy(pexelsList = pexelsRepository.fetchPexels(uiState.searchQuery), searchQuery = uiState.searchQuery, username = uiState.username)
-            }
-            catch(e: IOException){
-                Log.e("PexelsApp","Error se esta Recuperando la Lista")
-
+            try {
+                val fotos = pexelsRepository.fetchPexels(uiState.searchQuery)
+                uiState = uiState.copy(pexelsList = fotos)
+            } catch (e: IOException) {
+                Log.e("PexelsApp", "Error al recuperar fotos: ${e.message}")
             }
         }
-
     }
-    fun searchChange(search:String){
-        uiState = uiState.copy(searchQuery = search, pexelsList = uiState.pexelsList, username = uiState.username)
 
+    fun fetchVideos() {
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch {
+            try {
+                val videos = pexelsRepository.fetchPexelsVideos(uiState.searchQuery)
+                Log.d("PexelsApp", "Videos obtenidos: ${videos.size}")
+                uiState = uiState.copy(pexelsVideosList = videos)
+            } catch (e: IOException) {
+                Log.e("PexelsApp", "Error al recuperar videos: ${e.message}")
+            }
+        }
     }
+
+    fun onSearchTypeChange(type: SearchType) {
+        uiState = uiState.copy(searchType = type)
+    }
+    fun searchChange(search: String) {
+        uiState = uiState.copy(
+            searchQuery = search,
+            pexelsList = uiState.pexelsList,
+            pexelsVideosList = uiState.pexelsVideosList,
+            username = uiState.username
+        )
+    }
+
+
     fun getUserName(){
         uiState =uiState.copy(searchQuery = uiState.searchQuery, pexelsList = uiState.pexelsList, username = FirebaseAuth.getInstance().currentUser?.displayName?: "Usuario")
     }

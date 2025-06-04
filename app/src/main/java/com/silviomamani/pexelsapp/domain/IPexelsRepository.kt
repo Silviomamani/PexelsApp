@@ -1,9 +1,12 @@
 package com.silviomamani.pexelsapp.domain
 
 import com.silviomamani.pexelsapp.photos.Fotos
+import com.silviomamani.pexelsapp.photos.Videos
 
 interface IPexelsRepository {
     suspend fun fetchPexels(search: String) : List<Fotos>
 
     suspend fun fetchFoto(pexelsId: Int) : Fotos
+
+    suspend fun fetchPexelsVideos(search: String): List<Videos>
 }

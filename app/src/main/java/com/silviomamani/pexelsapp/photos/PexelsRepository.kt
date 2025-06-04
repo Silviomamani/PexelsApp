@@ -16,5 +16,8 @@ class PexelsRepository(
     override suspend fun fetchFoto(pexelsId: Int): Fotos {
         return pexelsDataSource.getPexelsById(pexelsId)
     }
+    override suspend fun fetchPexelsVideos(search: String): List<Videos>{
+        return pexelsDataSource.getPexelsVideoList(search)
+    }
 
 }

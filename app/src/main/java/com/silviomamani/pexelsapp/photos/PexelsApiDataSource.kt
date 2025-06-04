@@ -34,7 +34,22 @@ class PexelsApiDataSource :IPexelsDataSource{
 
         }
     }
-
+    override suspend fun getPexelsVideoList(search: String): List<Videos> {
+        Log.d("PexelsApp", "PexelsApiDataSource.getPexelsVideoList")
+        return try {
+            val pexelsResultVideos = RetrofitInstanceVideo.pexelsVideoApi.getVideosSearch(search)
+            return pexelsResultVideos.videos // O como se llame el campo del JSON que contiene la lista
+        } catch (e: HttpException) {
+            Log.e("PexelsApp", "HTTP error: ${e.code()} ${e.localizedMessage}")
+            emptyList()
+        } catch (e: IOException) {
+            Log.e("PexelsApp", "Network error: ${e.localizedMessage}")
+            emptyList()
+        } catch (e: Exception) {
+            Log.e("PexelsApp", "Unexpected error: ${e.localizedMessage}")
+            emptyList()
+        }
+    }
     override suspend fun getPexelsById(pexelsId: Int): Fotos {
         val db = FirebaseFirestore.getInstance()
 
@@ -59,4 +74,6 @@ class PexelsApiDataSource :IPexelsDataSource{
             foto
         }
     }
+
+
 }
