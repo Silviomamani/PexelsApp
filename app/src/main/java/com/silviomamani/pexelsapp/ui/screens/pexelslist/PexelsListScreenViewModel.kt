@@ -14,6 +14,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.IOException
 import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
 
 class PexelsListScreenViewModel (
     private val pexelsRepository: IPexelsRepository = PexelsRepository()
@@ -22,14 +23,14 @@ class PexelsListScreenViewModel (
     var uiState by mutableStateOf(PexelsListScreenState())
     private set
 init{
-    //fetchFotos()
+    getUserName()
 }
     private var fetchJob: Job? = null
     fun fetchFotos (){
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             try{
-                uiState = uiState.copy(pexelsList = pexelsRepository.fetchPexels(uiState.searchQuery))
+                uiState = uiState.copy(pexelsList = pexelsRepository.fetchPexels(uiState.searchQuery), searchQuery = uiState.searchQuery, username = uiState.username)
             }
             catch(e: IOException){
                 Log.e("PexelsApp","Error se esta Recuperando la Lista")
@@ -39,8 +40,11 @@ init{
 
     }
     fun searchChange(search:String){
-        uiState = uiState.copy(searchQuery = search, pexelsList = uiState.pexelsList)
+        uiState = uiState.copy(searchQuery = search, pexelsList = uiState.pexelsList, username = uiState.username)
 
+    }
+    fun getUserName(){
+        uiState =uiState.copy(searchQuery = uiState.searchQuery, pexelsList = uiState.pexelsList, username = FirebaseAuth.getInstance().currentUser?.displayName?: "Usuario")
     }
 }
 

@@ -13,4 +13,5 @@ interface IPexelsApi {
     suspend fun getFoto(
         @Path("Id") pexelsId: Int
     ): FotoDetailResult
+
 }

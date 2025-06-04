@@ -4,7 +4,8 @@ import com.silviomamani.pexelsapp.photos.Fotos
 import com.silviomamani.pexelsapp.photos.emptyFotos
 
 data class PexelsDetailScreenState (val pexelsId: Int = 0
-                                    , val pexelsDetail: Fotos = emptyFotos()
+                                    , val pexelsDetail: Fotos = emptyFotos(),
+                                    val isFavorito: Boolean = false
 ){
 
 }

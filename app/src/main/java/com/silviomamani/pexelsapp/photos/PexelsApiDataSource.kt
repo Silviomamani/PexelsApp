@@ -1,9 +1,13 @@
 package com.silviomamani.pexelsapp.photos
 
 import android.util.Log
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.silviomamani.pexelsapp.network.AuthInterceptor
+import kotlinx.coroutines.tasks.await
 import okhttp3.OkHttpClient
 import retrofit2.HttpException
 import java.io.IOException
@@ -32,7 +36,27 @@ class PexelsApiDataSource :IPexelsDataSource{
     }
 
     override suspend fun getPexelsById(pexelsId: Int): Fotos {
-        return RetrofitInstance.pexelsApi.getFoto(pexelsId)
-    }
+        val db = FirebaseFirestore.getInstance()
 
+        // Obtener el UID del usuario logueado con Google (a través de FirebaseAuth)
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val uid = currentUser?.uid ?: throw Exception("Usuario no logueado")
+
+        // Ruta: usuarios/{uid}/favoritos/{pexelsId}
+        val docRef = db.collection("usuarios")
+            .document(uid)
+            .collection("favoritos")
+            .document(pexelsId.toString())
+
+        val pexelsResult = docRef.get().await()
+        var foto = pexelsResult.toObject(Fotos::class.java)
+
+        return if (foto != null) {
+            foto
+        } else {
+            foto = RetrofitInstance.pexelsApi.getFoto(pexelsId)
+            docRef.set(foto).await()
+            foto
+        }
+    }
 }

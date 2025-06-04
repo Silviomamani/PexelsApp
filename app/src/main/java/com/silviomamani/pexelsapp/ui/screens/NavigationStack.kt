@@ -13,7 +13,8 @@ import com.silviomamani.pexelsapp.ui.screens.splash.SplashScreen
 @Composable
 fun NavigationStack(
     onGoogleLoginClick: () -> Unit,
-    navController : NavHostController
+    navController : NavHostController,
+    onLogoutClick: () -> Unit
 ){
 
     NavHost(
@@ -28,7 +29,7 @@ fun NavigationStack(
             LoginScreen(onGoogleLoginClick, navController = navController)
         }
         composable(route = Screens.PexelsList.route){
-            PexelsListScreen(navController = navController)
+            PexelsListScreen(navController = navController, onLogoutClick = onLogoutClick)
 
         }
         composable(route = Screens.PexelsDetail.route + "/{pexelsId}"){ it ->

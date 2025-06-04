@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,47 +28,61 @@ import com.silviomamani.pexelsapp.ui.theme.PexelsAppTheme
 
 @Composable
 fun PexelsListScreen(
-                     modifier: Modifier = Modifier,
-                     vm: PexelsListScreenViewModel = viewModel(),
-                     navController: NavHostController
+    modifier: Modifier = Modifier,
+    vm: PexelsListScreenViewModel = viewModel(),
+    navController: NavHostController,
+    onLogoutClick:  () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
-    ){
-    Text(
-        text = "Listado de Fotos",
-        style = MaterialTheme.typography.titleLarge,
-        modifier = modifier
-    )
+    ) {
+        // Fila superior con usuario y logout
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Usuario: ${vm.uiState.username}",
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.weight(1f)
+            )
+            Button(onClick = onLogoutClick) {
+                Text("Logout")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = "Listado de Fotos",
+            style = MaterialTheme.typography.titleLarge,
+            modifier = modifier
+        )
         Spacer(modifier = Modifier.height(12.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             TextField(
                 value = vm.uiState.searchQuery,
                 modifier = Modifier.weight(1f),
-                label = {Text("Buscar Fotos o Videos")},
+                label = { Text("Buscar Fotos o Videos") },
                 singleLine = true,
-                onValueChange = {vm.searchChange(it)}
+                onValueChange = { vm.searchChange(it) }
             )
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.width(12.dp))
             Button(
-                onClick = {vm.fetchFotos()}
+                onClick = { vm.fetchFotos() }
             ) {
                 Text("Buscar")
             }
         }
 
-
-
         Spacer(modifier = Modifier.height(12.dp))
-        PexelsUIList(vm.uiState.pexelsList,modifier.fillMaxSize(), onClick = {
 
-                id -> navController.navigate(Screens.PexelsDetail.route + "/${id}")
-
+        PexelsUIList(vm.uiState.pexelsList, modifier.fillMaxSize(), onClick = { id ->
+            navController.navigate(Screens.PexelsDetail.route + "/${id}")
         })
     }
-
 }

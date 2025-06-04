@@ -6,17 +6,17 @@ data class PexelsResult (
 
 
 data class Fotos(
-    val id: Int,
-    val photographer: String,
-    val alt: String,
-    val width: Int,
-    val height: Int,
-    val src: ImagesJpg
+    val id: Int = 0,
+    val photographer: String = "",
+    val alt: String = "",
+    val width: Int = 0,
+    val height: Int = 0,
+    val src: ImagesJpg = ImagesJpg((""), (""))
 
 )
 data class ImagesJpg(
-    val original: String,
-    val medium : String
+    val original: String = (""),
+    val medium : String = ("")
 )
 
 typealias FotoDetailResult = Fotos

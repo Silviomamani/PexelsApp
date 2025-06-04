@@ -9,6 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CloudUpload
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Visibility
@@ -25,11 +26,14 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PexelsUIItemDetail(
     fotos: Fotos,
+    isFavorito: Boolean,
+    onToggleFavorito: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -81,22 +85,33 @@ fun PexelsUIItemDetail(
                 .background(Color(0xFFE4F5E4)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(modifier = Modifier.padding(16.dp)) {
+            Box(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .size(250.dp)
+                    .clip(RoundedCornerShape(8.dp))
+            ) {
                 AsyncImage(
                     model = fotos.src.medium,
                     contentDescription = fotos.alt,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .size(250.dp)
+                        .fillMaxSize()
                         .clip(RoundedCornerShape(8.dp))
                 )
-                Icon(
-                    imageVector = Icons.Default.FavoriteBorder,
-                    contentDescription = "Favorito",
+
+                IconButton(
+                    onClick = onToggleFavorito,
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(8.dp)
-                )
+                ) {
+                    Icon(
+                        imageVector = if (isFavorito) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = if (isFavorito) "Quitar de favoritos" else "Agregar a favoritos",
+                        tint = if (isFavorito) Color.Red else Color.White
+                    )
+                }
             }
 
             Row(
@@ -106,7 +121,7 @@ fun PexelsUIItemDetail(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(text = fotos.alt.ifEmpty { "Lorem" })
-                Text(text = "Medidas") // Podés agregar tamaño real de la imagen si querés
+                Text(text = "Medidas")
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -116,7 +131,7 @@ fun PexelsUIItemDetail(
                 modifier = Modifier.padding(horizontal = 32.dp)
             ) {
                 AsyncImage(
-                    model = "https://randomuser.me/api/portraits/women/1.jpg", // Placeholder de avatar
+                    model = "https://randomuser.me/api/portraits/women/1.jpg",
                     contentDescription = "Fotógrafo",
                     modifier = Modifier
                         .size(40.dp)
