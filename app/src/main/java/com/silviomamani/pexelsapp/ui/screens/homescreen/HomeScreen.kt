@@ -5,20 +5,29 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,17 +38,21 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.silviomamani.pexelsapp.ui.screens.Screens
 import com.silviomamani.pexelsapp.ui.screens.commons.PexelsItem
+import com.silviomamani.pexelsapp.ui.screens.commons.PexelsUIList
+import com.silviomamani.pexelsapp.ui.screens.commons.SearchType
 import com.silviomamani.pexelsapp.ui.screens.pexelslist.PexelsListScreenViewModel
-
 @Composable
 fun HomeScreen(
     navController: NavHostController,
     userName: String,
     onLogoutClick: () -> Unit,
-    photoViewModel: PexelsListScreenViewModel = HomeScreenViewModel(),
+    photoViewModel: PexelsListScreenViewModel = viewModel(), // ✅ Corregido: usar el tipo correcto
     homeViewModel: HomeScreenViewModel = viewModel()
 ) {
     val state by homeViewModel.state.collectAsState()
+    var searchQuery by remember { mutableStateOf("") }
+    var searchType by remember { mutableStateOf(SearchType.PHOTOS) }
+    var expanded by remember { mutableStateOf(false) }
 
     // ✅ Ejecutar según la sección seleccionada
     LaunchedEffect(state.selectedSection) {
@@ -78,17 +91,89 @@ fun HomeScreen(
             }
         }
 
-        // Título por sección
-        Text(
-            text = when (state.selectedSection) {
-                Section.PHOTOS -> "Fotos recomendadas"
-                Section.VIDEOS -> "Videos populares"
-                Section.FAVORITES -> "Tus favoritos"
-                else -> ""
-            },
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(16.dp)
-        )
+        // Buscador (solo visible en PHOTOS y VIDEOS)
+        if (state.selectedSection == Section.PHOTOS || state.selectedSection == Section.VIDEOS) {
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = "Buscar ${searchType.name.lowercase().replaceFirstChar { it.uppercase() }}",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                // Selector de tipo de búsqueda
+                Box {
+                    Button(onClick = { expanded = true }) {
+                        Text(searchType.name)
+                    }
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("FOTOS") },
+                            onClick = {
+                                searchType = SearchType.PHOTOS
+                                expanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("VIDEOS") },
+                            onClick = {
+                                searchType = SearchType.VIDEOS
+                                expanded = false
+                            }
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                // Campo de búsqueda
+                TextField(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    modifier = Modifier.weight(1f),
+                    label = { Text("Buscar ${searchType.name.lowercase()}") },
+                    singleLine = true
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                // Botón de búsqueda
+                Button(
+                    onClick = {
+                        // Actualizar el tipo de búsqueda en el ViewModel y buscar
+                        photoViewModel.onSearchTypeChange(searchType)
+                        photoViewModel.searchChange(searchQuery)
+                        photoViewModel.fetchResults()
+                    }
+                ) {
+                    Text("Buscar")
+                }
+            }
+        }
+
+        // Título por sección (solo para FAVORITES y UPLOAD)
+        if (state.selectedSection == Section.FAVORITES || state.selectedSection == Section.UPLOAD) {
+            Text(
+                text = when (state.selectedSection) {
+                    Section.FAVORITES -> "Tus favoritos"
+                    Section.UPLOAD -> "Subir contenido"
+                    else -> ""
+                },
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
 
         // Contenido
         when {
@@ -101,24 +186,60 @@ fun HomeScreen(
             }
 
             state.selectedSection == Section.PHOTOS -> {
-                val photos = photoViewModel.recommendedPhotos.collectAsState().value
-                LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-                    items(photos) { photo ->
-                        PexelsItem.PhotoItem(foto = photo) {
-                            navController.navigate(Screens.PexelsDetail.route + "/${photo.id}")
+                // Mostrar resultados de búsqueda si hay query, sino recomendadas
+                if (searchQuery.isNotEmpty() && photoViewModel.uiState.searchQuery.isNotEmpty()) {
+                    // Mostrar resultados de búsqueda
+                    PexelsUIList(
+                        pexelsList = photoViewModel.combinedList,
+                        modifier = Modifier.fillMaxSize(),
+                        onClick = { id, isVideo ->
+                            if (isVideo) {
+                                navController.navigate(Screens.PexelsVideosDetail.route + "/$id")
+                            } else {
+                                navController.navigate(Screens.PexelsDetail.route + "/$id")
+                            }
                         }
-                    }
+                    )
+                } else {
+                    // Mostrar fotos recomendadas
+                    val photos = photoViewModel.recommendedPhotos.collectAsState().value
+                    val photoItems = photos.map { PexelsItem.PhotoItem(foto = it) }
+                    PexelsUIList(
+                        pexelsList = photoItems,
+                        modifier = Modifier.fillMaxSize(),
+                        onClick = { id, isVideo ->
+                            navController.navigate(Screens.PexelsDetail.route + "/$id")
+                        }
+                    )
                 }
             }
 
             state.selectedSection == Section.VIDEOS -> {
-                val videos = photoViewModel.recommendedVideos.collectAsState().value
-                LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-                    items(videos) { video ->
-                        PexelsItem.VideoItem(video = video) {
-                            navController.navigate(Screens.PexelsVideosDetail.route + "/${video.id}")
+                // Mostrar resultados de búsqueda si hay query, sino recomendados
+                if (searchQuery.isNotEmpty() && photoViewModel.uiState.searchQuery.isNotEmpty()) {
+                    // Mostrar resultados de búsqueda
+                    PexelsUIList(
+                        pexelsList = photoViewModel.combinedList,
+                        modifier = Modifier.fillMaxSize(),
+                        onClick = { id, isVideo ->
+                            if (isVideo) {
+                                navController.navigate(Screens.PexelsVideosDetail.route + "/$id")
+                            } else {
+                                navController.navigate(Screens.PexelsDetail.route + "/$id")
+                            }
                         }
-                    }
+                    )
+                } else {
+                    // Mostrar videos recomendados
+                    val videos = photoViewModel.recommendedVideos.collectAsState().value
+                    val videoItems = videos.map { PexelsItem.VideoItem(video = it) }
+                    PexelsUIList(
+                        pexelsList = videoItems,
+                        modifier = Modifier.fillMaxSize(),
+                        onClick = { id, isVideo ->
+                            navController.navigate(Screens.PexelsVideosDetail.route + "/$id")
+                        }
+                    )
                 }
             }
 
