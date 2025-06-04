@@ -1,5 +1,6 @@
 package com.silviomamani.pexelsapp.ui.screens.login
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,9 +27,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -37,8 +41,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.silviomamani.pexelsapp.AccountChooserDialog
 import com.silviomamani.pexelsapp.ui.screens.Screens
-
 @Composable
 fun LoginScreen(
     onGoogleLoginClick: () -> Unit,
@@ -46,11 +50,32 @@ fun LoginScreen(
     navController: NavHostController,
     vm: LoginScreenViewModel = viewModel()
 ) {
+    val context = LocalContext.current
+    val showAccountChooser by vm.showAccountChooser.collectAsState()
+    val availableAccounts by vm.availableAccounts.collectAsState()
+
+    // Inicializar Google Sign In
+    LaunchedEffect(Unit) {
+        vm.initializeGoogleSignIn(context)
+    }
+
     LaunchedEffect(Unit) {
         vm.uiEvent.collect { event ->
-            if (event == "LoginOK") {
-                navController.navigate(Screens.Home.route) {
-                    popUpTo(Screens.Login.route) { inclusive = true }
+            when (event) {
+                "LoginOK" -> {
+                    navController.navigate(Screens.Home.route) {
+                        popUpTo(Screens.Login.route) { inclusive = true }
+                    }
+                }
+                "StartGoogleSignIn" -> {
+                    onGoogleLoginClick()
+                }
+                else -> {
+                    // Manejar errores si es necesario
+                    if (event.startsWith("Error:")) {
+                        // Mostrar error al usuario
+                        Toast.makeText(context, event, Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }
@@ -116,7 +141,7 @@ fun LoginScreen(
             // Campo Email (solo visual)
             TextField(
                 value = "",
-                onValueChange = { /* No funciona */ },
+                onValueChange = { },
                 placeholder = { Text("Email", color = Color.Gray) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -128,13 +153,13 @@ fun LoginScreen(
                     unfocusedIndicatorColor = Color.Transparent
                 ),
                 shape = RoundedCornerShape(8.dp),
-                enabled = false // Para que se vea pero no funcione
+                enabled = false
             )
 
             // Campo Contraseña (solo visual)
             TextField(
                 value = "",
-                onValueChange = { /* No funciona */ },
+                onValueChange = { },
                 placeholder = { Text("Contraseña", color = Color.Gray) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -147,12 +172,12 @@ fun LoginScreen(
                 ),
                 shape = RoundedCornerShape(8.dp),
                 visualTransformation = PasswordVisualTransformation(),
-                enabled = false // Para que se vea pero no funcione
+                enabled = false
             )
 
             // Botón Entrar (solo visual)
             Button(
-                onClick = { /* No funciona */ },
+                onClick = { },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -162,7 +187,7 @@ fun LoginScreen(
                     disabledContainerColor = Color(0xFF8BC34A)
                 ),
                 shape = RoundedCornerShape(8.dp),
-                enabled = false // Para que se vea pero no funcione
+                enabled = false
             ) {
                 Text(
                     "Entrar",
@@ -223,7 +248,7 @@ fun LoginScreen(
 
             // Botón de Google (FUNCIONAL)
             Button(
-                onClick = onGoogleLoginClick,
+                onClick = { vm.onGoogleLoginClick(context) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -238,7 +263,6 @@ fun LoginScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    // Icono de Google (puedes usar un ícono real o emoji)
                     Text(
                         text = "🔍",
                         fontSize = 20.sp,
@@ -254,4 +278,19 @@ fun LoginScreen(
             }
         }
     }
+
+    // Diálogo selector de cuentas
+    AccountChooserDialog(
+        showDialog = showAccountChooser,
+        accounts = availableAccounts,
+        onAccountSelected = { account ->
+            vm.signInWithSelectedAccount(account)
+        },
+        onAddNewAccount = {
+            vm.signInWithNewAccount()
+        },
+        onDismiss = {
+            vm.dismissAccountChooser()
+        }
+    )
 }
