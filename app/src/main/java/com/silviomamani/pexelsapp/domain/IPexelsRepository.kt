@@ -9,4 +9,6 @@ interface IPexelsRepository {
     suspend fun fetchFoto(pexelsId: Int) : Fotos
 
     suspend fun fetchPexelsVideos(search: String): List<Videos>
+
+    suspend fun getVideoById(videoId: Int): Videos
 }

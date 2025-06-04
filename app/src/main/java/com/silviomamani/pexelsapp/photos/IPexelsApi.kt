@@ -10,6 +10,7 @@ interface IPexelsApi {
         @Query("query") search : String,
         @Query("per_page") perPage: Int = 12
     ) : PexelsResult
+
     @GET("photos/{Id}")
     suspend fun getFoto(
         @Path("Id") pexelsId: Int
@@ -23,8 +24,8 @@ interface IPexelsApi {
     ): PexelsVideoResult
 
 
-    @GET("videos/videos/{id}")
-    suspend fun getVideo(
+    @GET("videos/{id}")
+    suspend fun getVideoById(
         @Path("id") videoId: Int
     ): VideoDetailResult
 

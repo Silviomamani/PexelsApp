@@ -50,6 +50,15 @@ class PexelsApiDataSource :IPexelsDataSource{
             emptyList()
         }
     }
+
+    override suspend fun getVideoById(videoId: Int): Videos {
+        return try {
+            RetrofitInstanceVideo.pexelsVideoApi.getVideoById(videoId)
+        } catch (e: Exception) {
+            Log.e("PexelsApp", "Error al obtener video por ID: ${e.localizedMessage}")
+            throw e
+        }
+    }
     override suspend fun getPexelsById(pexelsId: Int): Fotos {
         val db = FirebaseFirestore.getInstance()
 

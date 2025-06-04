@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.silviomamani.pexelsapp.ui.screens.login.LoginScreen
 import com.silviomamani.pexelsapp.ui.screens.pexelsdetail.PexelsDetailScreen
 import com.silviomamani.pexelsapp.ui.screens.pexelslist.PexelsListScreen
+import com.silviomamani.pexelsapp.ui.screens.pexelsvideodetail.PexelsVideoDetailScreen
 import com.silviomamani.pexelsapp.ui.screens.splash.SplashScreen
 
 @Composable
@@ -38,10 +39,10 @@ fun NavigationStack(
            PexelsDetailScreen(pexelsId ?: 0)
 
         }
-        //composable(route = Screens.PexelsVideosDetail.route + "/{videoId}") { backStackEntry ->
-        //    val videoId = backStackEntry.arguments?.getString("videoId")?.toIntOrNull() ?: 0
-        //    PexelsVideoDetailScreen(videoId)
-        //}
+        composable(route = Screens.PexelsVideosDetail.route + "/{videoId}") { backStackEntry ->
+            val videoId = backStackEntry.arguments?.getString("videoId")?.toIntOrNull() ?: 0
+            PexelsVideoDetailScreen(videoId)
+        }
 
     }
 }
