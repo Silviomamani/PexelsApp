@@ -10,43 +10,50 @@ import com.silviomamani.pexelsapp.ui.screens.pexelsdetail.PexelsDetailScreen
 import com.silviomamani.pexelsapp.ui.screens.pexelslist.PexelsListScreen
 import com.silviomamani.pexelsapp.ui.screens.pexelsvideodetail.PexelsVideoDetailScreen
 import com.silviomamani.pexelsapp.ui.screens.splash.SplashScreen
-
 @Composable
 fun NavigationStack(
     onGoogleLoginClick: () -> Unit,
-    navController : NavHostController,
+    navController: NavHostController,
     onLogoutClick: () -> Unit
-){
-
+) {
     NavHost(
         navController = navController,
         startDestination = Screens.Splash.route
-    ){
+    ) {
         composable(route = Screens.Splash.route) {
             SplashScreen(navController = navController)
         }
 
-        composable(route = Screens.Login.route){
-            LoginScreen(onGoogleLoginClick, navController = navController)
+        composable(route = Screens.Login.route) {
+            LoginScreen(
+                onGoogleLoginClick = onGoogleLoginClick,
+                navController = navController
+            )
         }
 
         composable(route = Screens.Home.route) {
-            HomeScreen(navController = navController, userName = "Silvio Mamani", onLogoutClick = onLogoutClick)
+            HomeScreen(
+                navController = navController,
+                userName = "Silvio Mamani",
+                onLogoutClick = onLogoutClick
+            )
         }
-        composable(route = Screens.PexelsList.route){
-            PexelsListScreen(navController = navController, onLogoutClick = onLogoutClick)
 
+        composable(route = Screens.PexelsList.route) {
+            PexelsListScreen(
+                navController = navController,
+                onLogoutClick = onLogoutClick
+            )
         }
-        composable(route = Screens.PexelsDetail.route + "/{pexelsId}"){ it ->
-            var id = it.arguments?.getString("pexelsId")
-            val pexelsId = id?.toIntOrNull()
-           PexelsDetailScreen(pexelsId ?: 0)
 
+        composable(route = Screens.PexelsDetail.route + "/{pexelsId}") { backStackEntry ->
+            val pexelsId = backStackEntry.arguments?.getString("pexelsId")?.toIntOrNull() ?: 0
+            PexelsDetailScreen(pexelsId)
         }
+
         composable(route = Screens.PexelsVideosDetail.route + "/{videoId}") { backStackEntry ->
             val videoId = backStackEntry.arguments?.getString("videoId")?.toIntOrNull() ?: 0
             PexelsVideoDetailScreen(videoId)
         }
-
     }
 }

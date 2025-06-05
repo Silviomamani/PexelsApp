@@ -41,6 +41,8 @@ import com.silviomamani.pexelsapp.ui.screens.commons.PexelsItem
 import com.silviomamani.pexelsapp.ui.screens.commons.PexelsUIList
 import com.silviomamani.pexelsapp.ui.screens.commons.SearchType
 import com.silviomamani.pexelsapp.ui.screens.pexelslist.PexelsListScreenViewModel
+
+
 @Composable
 fun HomeScreen(
     navController: NavHostController,
