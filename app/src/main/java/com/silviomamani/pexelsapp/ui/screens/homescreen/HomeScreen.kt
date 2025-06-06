@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
@@ -33,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.silviomamani.pexelsapp.ui.screens.Screens
@@ -48,7 +45,7 @@ fun HomeScreen(
     navController: NavHostController,
     userName: String,
     onLogoutClick: () -> Unit,
-    photoViewModel: PexelsListScreenViewModel = viewModel(), // ✅ Corregido: usar el tipo correcto
+    photoViewModel: PexelsListScreenViewModel = viewModel(),
     homeViewModel: HomeScreenViewModel = viewModel()
 ) {
     val state by homeViewModel.state.collectAsState()
@@ -56,12 +53,12 @@ fun HomeScreen(
     var searchType by remember { mutableStateOf(SearchType.PHOTOS) }
     var expanded by remember { mutableStateOf(false) }
 
-    // ✅ Ejecutar según la sección seleccionada
+
     LaunchedEffect(state.selectedSection) {
         when (state.selectedSection) {
             Section.PHOTOS -> photoViewModel.fetchRecommendedPhotos()
             Section.VIDEOS -> photoViewModel.fetchRecommendedVideos()
-            else -> {} // Por ahora nada en FAVORITES o UPLOAD
+            else -> {}
         }
     }
 
@@ -70,7 +67,7 @@ fun HomeScreen(
             .fillMaxSize()
             .background(Color(0xFFE8F5E9))
     ) {
-        // Header con nombre y logout
+
         Row(
             Modifier
                 .fillMaxWidth()
@@ -81,7 +78,7 @@ fun HomeScreen(
             Button(onClick = onLogoutClick) { Text("Logout") }
         }
 
-        // Selector de sección
+
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             Section.entries.forEach { section ->
                 TextButton(onClick = { homeViewModel.selectSection(section) }) {
@@ -93,7 +90,7 @@ fun HomeScreen(
             }
         }
 
-        // Buscador (solo visible en PHOTOS y VIDEOS)
+
         if (state.selectedSection == Section.PHOTOS || state.selectedSection == Section.VIDEOS) {
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -111,7 +108,7 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             ) {
-                // Selector de tipo de búsqueda
+
                 Box {
                     Button(onClick = { expanded = true }) {
                         Text(searchType.name)
@@ -139,7 +136,7 @@ fun HomeScreen(
 
                 Spacer(modifier = Modifier.width(12.dp))
 
-                // Campo de búsqueda
+
                 TextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
@@ -150,10 +147,10 @@ fun HomeScreen(
 
                 Spacer(modifier = Modifier.width(12.dp))
 
-                // Botón de búsqueda
+
                 Button(
                     onClick = {
-                        // Actualizar el tipo de búsqueda en el ViewModel y buscar
+
                         photoViewModel.onSearchTypeChange(searchType)
                         photoViewModel.searchChange(searchQuery)
                         photoViewModel.fetchResults()
@@ -164,7 +161,7 @@ fun HomeScreen(
             }
         }
 
-        // Título por sección (solo para FAVORITES y UPLOAD)
+
         if (state.selectedSection == Section.FAVORITES || state.selectedSection == Section.UPLOAD) {
             Text(
                 text = when (state.selectedSection) {
@@ -177,7 +174,7 @@ fun HomeScreen(
             )
         }
 
-        // Contenido
+
         when {
             state.isLoading -> {
                 CircularProgressIndicator(Modifier.align(Alignment.CenterHorizontally))
@@ -188,9 +185,9 @@ fun HomeScreen(
             }
 
             state.selectedSection == Section.PHOTOS -> {
-                // Mostrar resultados de búsqueda si hay query, sino recomendadas
+
                 if (searchQuery.isNotEmpty() && photoViewModel.uiState.searchQuery.isNotEmpty()) {
-                    // Mostrar resultados de búsqueda
+
                     PexelsUIList(
                         pexelsList = photoViewModel.combinedList,
                         modifier = Modifier.fillMaxSize(),
@@ -203,7 +200,7 @@ fun HomeScreen(
                         }
                     )
                 } else {
-                    // Mostrar fotos recomendadas
+
                     val photos = photoViewModel.recommendedPhotos.collectAsState().value
                     val photoItems = photos.map { PexelsItem.PhotoItem(foto = it) }
                     PexelsUIList(
@@ -217,9 +214,9 @@ fun HomeScreen(
             }
 
             state.selectedSection == Section.VIDEOS -> {
-                // Mostrar resultados de búsqueda si hay query, sino recomendados
+
                 if (searchQuery.isNotEmpty() && photoViewModel.uiState.searchQuery.isNotEmpty()) {
-                    // Mostrar resultados de búsqueda
+
                     PexelsUIList(
                         pexelsList = photoViewModel.combinedList,
                         modifier = Modifier.fillMaxSize(),
@@ -232,7 +229,7 @@ fun HomeScreen(
                         }
                     )
                 } else {
-                    // Mostrar videos recomendados
+
                     val videos = photoViewModel.recommendedVideos.collectAsState().value
                     val videoItems = videos.map { PexelsItem.VideoItem(video = it) }
                     PexelsUIList(

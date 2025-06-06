@@ -79,7 +79,7 @@ class RegisterScreenViewModel : ViewModel() {
             return
         }
 
-        // Proceder con el registro
+
         registerUser(currentState.email, currentState.password, currentState.name)
     }
 
@@ -88,21 +88,21 @@ class RegisterScreenViewModel : ViewModel() {
             try {
                 _uiState.value = _uiState.value.copy(isLoading = true)
 
-                // Crear usuario con Firebase Auth
+
                 val result = FirebaseAuth.getInstance()
                     .createUserWithEmailAndPassword(email, password)
                     .await()
 
                 val user = result.user
                 if (user != null) {
-                    // Actualizar el perfil del usuario con el nombre
+
                     val profileUpdates = UserProfileChangeRequest.Builder()
                         .setDisplayName(name)
                         .build()
 
                     user.updateProfile(profileUpdates).await()
 
-                    // Guardar información adicional en Firestore
+
                     saveUserToFirestore(user.uid, name, email)
 
                     _uiEvent.send("RegisterOK")
@@ -137,7 +137,7 @@ class RegisterScreenViewModel : ViewModel() {
                 .set(userDocument)
                 .await()
         } catch (e: Exception) {
-            // Log del error pero no interrumpe el flujo de registro
+
             Log.e("RegisterViewModel", "Error saving user to Firestore", e)
         }
     }

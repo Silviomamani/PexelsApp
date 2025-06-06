@@ -47,7 +47,7 @@ fun PexelsListScreen(
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
     ) {
-        // Usuario y logout
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -71,12 +71,12 @@ fun PexelsListScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Búsqueda con selector
+
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            // Selector (a la izquierda del buscador)
+
             Box {
                 Button(onClick = { expanded = true }) {
                     Text(vm.uiState.searchType.name)
@@ -98,7 +98,7 @@ fun PexelsListScreen(
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            // Input de búsqueda
+
             TextField(
                 value = vm.uiState.searchQuery,
                 onValueChange = { vm.searchChange(it) },
@@ -109,7 +109,7 @@ fun PexelsListScreen(
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            // Botón de búsqueda
+
             Button(onClick = { vm.fetchResults() }) {
                 Text("Buscar")
             }
@@ -117,7 +117,6 @@ fun PexelsListScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Lista combinada
         PexelsUIList(
             pexelsList = vm.combinedList,
             modifier = Modifier.fillMaxSize(),

@@ -67,7 +67,6 @@ class LoginScreenViewModel : ViewModel() {
             return
         }
 
-        // Proceder con el login
         loginUser(currentState.email, currentState.password)
     }
 
@@ -76,7 +75,6 @@ class LoginScreenViewModel : ViewModel() {
             try {
                 _uiState.value = _uiState.value.copy(isLoading = true)
 
-                // Intentar iniciar sesión con Firebase Auth
                 val result = FirebaseAuth.getInstance()
                     .signInWithEmailAndPassword(email, password)
                     .await()

@@ -28,7 +28,7 @@ fun PexelsVideoItem(video: Videos, onClick: () -> Unit) {
     ) {
         Column {
             AsyncImage(
-                model = video.image, // Asegurate que `video.image` sea una miniatura
+                model = video.image,
                 contentDescription = "Video thumbnail",
                 modifier = Modifier
                     .fillMaxWidth()

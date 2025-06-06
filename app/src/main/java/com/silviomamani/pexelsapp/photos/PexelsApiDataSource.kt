@@ -62,11 +62,11 @@ class PexelsApiDataSource :IPexelsDataSource{
     override suspend fun getPexelsById(pexelsId: Int): Fotos {
         val db = FirebaseFirestore.getInstance()
 
-        // Obtener el UID del usuario logueado con Google (a través de FirebaseAuth)
+
         val currentUser = FirebaseAuth.getInstance().currentUser
         val uid = currentUser?.uid ?: throw Exception("Usuario no logueado")
 
-        // Ruta: usuarios/{uid}/favoritos/{pexelsId}
+
         val docRef = db.collection("usuarios")
             .document(uid)
             .collection("favoritos")

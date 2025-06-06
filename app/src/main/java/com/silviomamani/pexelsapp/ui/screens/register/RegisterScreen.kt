@@ -53,7 +53,6 @@ fun RegisterScreen(
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    // Manejar eventos de UI
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when {
@@ -74,7 +73,7 @@ fun RegisterScreen(
             .background(Color(0xFFE8F5E9))
             .statusBarsPadding()
     ) {
-        // Header con flecha de regreso
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -93,7 +92,6 @@ fun RegisterScreen(
             }
         }
 
-        // Contenido principal centrado
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -102,7 +100,7 @@ fun RegisterScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Título de bienvenida
+
             Text(
                 text = "Crear cuenta en",
                 style = MaterialTheme.typography.headlineMedium,
@@ -118,7 +116,7 @@ fun RegisterScreen(
                 modifier = Modifier.padding(bottom = 48.dp)
             )
 
-            // Título de registro
+
             Text(
                 text = "Registrarse",
                 style = MaterialTheme.typography.headlineSmall,
@@ -130,7 +128,7 @@ fun RegisterScreen(
                 textAlign = TextAlign.Start
             )
 
-            // Campo Nombre
+
             TextField(
                 value = uiState.name,
                 onValueChange = viewModel::onNameChange,
@@ -149,7 +147,7 @@ fun RegisterScreen(
                 enabled = !uiState.isLoading
             )
 
-            // Campo Email
+
             TextField(
                 value = uiState.email,
                 onValueChange = viewModel::onEmailChange,
@@ -169,7 +167,7 @@ fun RegisterScreen(
                 enabled = !uiState.isLoading
             )
 
-            // Campo Contraseña
+
             TextField(
                 value = uiState.password,
                 onValueChange = viewModel::onPasswordChange,
@@ -190,7 +188,7 @@ fun RegisterScreen(
                 enabled = !uiState.isLoading
             )
 
-            // Campo Confirmar Contraseña
+
             TextField(
                 value = uiState.confirmPassword,
                 onValueChange = viewModel::onConfirmPasswordChange,
@@ -211,7 +209,7 @@ fun RegisterScreen(
                 enabled = !uiState.isLoading
             )
 
-            // Botón Crear Cuenta
+
             Button(
                 onClick = viewModel::onRegisterClick,
                 modifier = Modifier
@@ -239,7 +237,6 @@ fun RegisterScreen(
                 }
             }
 
-            // Texto "¿Ya tienes cuenta? Inicia sesión"
             Row(
                 modifier = Modifier.clickable { onBackClick() }
             ) {

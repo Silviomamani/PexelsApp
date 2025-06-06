@@ -29,13 +29,11 @@ interface IPexelsApi {
         @Path("id") videoId: Int
     ): VideoDetailResult
 
-    // ✅ NUEVO: Obtener videos populares
     @GET("popular")
     suspend fun getPopularVideos(
         @Query("per_page") perPage: Int = 15
     ): PexelsVideoResult
 
-    // ✅ NUEVO: Obtener fotos populares
     @GET("popular")
     suspend fun getPopularFotos(
         @Query("per_page") perPage: Int = 12

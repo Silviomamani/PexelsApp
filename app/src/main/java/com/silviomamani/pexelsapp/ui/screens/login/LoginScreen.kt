@@ -62,7 +62,6 @@ fun LoginScreen(
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    // Manejar eventos de UI
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when {
@@ -81,7 +80,6 @@ fun LoginScreen(
         }
     }
 
-    // Verificar si ya está logueado
     LaunchedEffect(Unit) {
         if (FirebaseAuth.getInstance().currentUser != null) {
             navController.navigate(Screens.Home.route) {
@@ -96,7 +94,6 @@ fun LoginScreen(
             .background(Color(0xFFE8F5E9))
             .statusBarsPadding()
     ) {
-        // Header con flecha de regreso
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -111,7 +108,7 @@ fun LoginScreen(
             )
         }
 
-        // Contenido principal centrado
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -120,7 +117,6 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Título de bienvenida
             Text(
                 text = "Bienvenido a",
                 style = MaterialTheme.typography.headlineMedium,
@@ -136,7 +132,6 @@ fun LoginScreen(
                 modifier = Modifier.padding(bottom = 48.dp)
             )
 
-            // Título de iniciar sesión
             Text(
                 text = "Iniciar sesión",
                 style = MaterialTheme.typography.headlineSmall,
@@ -148,7 +143,6 @@ fun LoginScreen(
                 textAlign = TextAlign.Start
             )
 
-            // Campo Email (FUNCIONAL)
             TextField(
                 value = uiState.email,
                 onValueChange = viewModel::onEmailChange,
@@ -168,7 +162,7 @@ fun LoginScreen(
                 enabled = !uiState.isLoading
             )
 
-            // Campo Contraseña (FUNCIONAL)
+
             TextField(
                 value = uiState.password,
                 onValueChange = viewModel::onPasswordChange,
@@ -189,7 +183,6 @@ fun LoginScreen(
                 enabled = !uiState.isLoading
             )
 
-            // Botón Entrar (FUNCIONAL)
             Button(
                 onClick = viewModel::onLoginClick,
                 modifier = Modifier
@@ -217,7 +210,6 @@ fun LoginScreen(
                 }
             }
 
-            // Texto "¿Olvidaste tu contraseña?" (solo visual por ahora)
             Text(
                 text = "¿Olvidaste tu contraseña?",
                 color = Color.Gray,
@@ -225,7 +217,6 @@ fun LoginScreen(
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            // Texto "¿No tienes cuenta? Regístrate" (FUNCIONAL)
             Row(
                 modifier = Modifier.clickable { onRegisterClick() }
             ) {
@@ -244,7 +235,6 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Divisor con "O"
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -268,7 +258,6 @@ fun LoginScreen(
                 )
             }
 
-            // Botón de Google (FUNCIONAL)
             Button(
                 onClick = viewModel::onGoogleLoginClick,
                 modifier = Modifier

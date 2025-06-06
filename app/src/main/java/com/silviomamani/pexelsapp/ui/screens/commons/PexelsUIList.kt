@@ -13,7 +13,7 @@ import com.silviomamani.pexelsapp.photos.Fotos
 fun PexelsUIList(
     pexelsList: List<PexelsItem>,
     modifier: Modifier = Modifier,
-    onClick: (Int, Boolean) -> Unit // el segundo parámetro indica si es video
+    onClick: (Int, Boolean) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),

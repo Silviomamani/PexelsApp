@@ -47,7 +47,6 @@ class MainActivity : ComponentActivity() {
         // Inicializar Firebase
         FirebaseApp.initializeApp(this)
 
-        // Configurar Google Sign-In
         googleSignInClient = GoogleSignIn.getClient(
             this,
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -88,7 +87,6 @@ class MainActivity : ComponentActivity() {
                             }
                         )
 
-                        // Loading overlay
                         if (isLoading) {
                             Box(
                                 modifier = Modifier
@@ -113,7 +111,6 @@ class MainActivity : ComponentActivity() {
             FirebaseAuth.getInstance().signInWithCredential(credential)
                 .addOnCompleteListener { authResult ->
                     if (authResult.isSuccessful) {
-                        // Navegar a Home
                         navController.navigate(Screens.Home.route) {
                             popUpTo(Screens.Login.route) { inclusive = true }
                         }

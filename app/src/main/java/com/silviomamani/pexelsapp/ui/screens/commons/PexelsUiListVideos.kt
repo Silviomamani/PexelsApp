@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.silviomamani.pexelsapp.photos.Videos
-import com.silviomamani.pexelsapp.ui.screens.commons.PexelsVideoItem // ✅ import correcto
 
 @Composable
 fun PexelsUIListVideos(
