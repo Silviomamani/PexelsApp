@@ -1,15 +1,11 @@
-package com.silviomamani.pexelsapp.ui.screens.login
-
+package com.silviomamani.pexelsapp.ui.screens.register
 
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,8 +21,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -39,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -47,18 +42,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import com.google.firebase.auth.FirebaseAuth
-import com.silviomamani.pexelsapp.ui.screens.Screens
 
 @Composable
-fun LoginScreen(
-    onGoogleLoginClick: () -> Unit,
-    onRegisterClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    navController: NavHostController
+fun RegisterScreen(
+    onBackClick: () -> Unit,
+    onRegisterSuccess: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    val viewModel: LoginScreenViewModel = viewModel()
+    val viewModel: RegisterScreenViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
@@ -66,26 +57,13 @@ fun LoginScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when {
-                event == "LoginOK" -> {
-                    navController.navigate(Screens.Home.route) {
-                        popUpTo(Screens.Login.route) { inclusive = true }
-                    }
-                }
-                event == "StartGoogleSignIn" -> {
-                    onGoogleLoginClick()
+                event == "RegisterOK" -> {
+                    Toast.makeText(context, "Cuenta creada exitosamente", Toast.LENGTH_SHORT).show()
+                    onRegisterSuccess()
                 }
                 event.startsWith("Error:") -> {
                     Toast.makeText(context, event, Toast.LENGTH_LONG).show()
                 }
-            }
-        }
-    }
-
-    // Verificar si ya está logueado
-    LaunchedEffect(Unit) {
-        if (FirebaseAuth.getInstance().currentUser != null) {
-            navController.navigate(Screens.Home.route) {
-                popUpTo(Screens.Login.route) { inclusive = true }
             }
         }
     }
@@ -103,12 +81,16 @@ fun LoginScreen(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Volver",
-                tint = Color.Black,
-                modifier = Modifier.size(24.dp)
-            )
+            IconButton(
+                onClick = onBackClick
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Volver",
+                    tint = Color.Black,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
         }
 
         // Contenido principal centrado
@@ -122,7 +104,7 @@ fun LoginScreen(
         ) {
             // Título de bienvenida
             Text(
-                text = "Bienvenido a",
+                text = "Crear cuenta en",
                 style = MaterialTheme.typography.headlineMedium,
                 color = Color.Black,
                 fontWeight = FontWeight.Normal
@@ -136,9 +118,9 @@ fun LoginScreen(
                 modifier = Modifier.padding(bottom = 48.dp)
             )
 
-            // Título de iniciar sesión
+            // Título de registro
             Text(
-                text = "Iniciar sesión",
+                text = "Registrarse",
                 style = MaterialTheme.typography.headlineSmall,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
@@ -148,7 +130,26 @@ fun LoginScreen(
                 textAlign = TextAlign.Start
             )
 
-            // Campo Email (FUNCIONAL)
+            // Campo Nombre
+            TextField(
+                value = uiState.name,
+                onValueChange = viewModel::onNameChange,
+                placeholder = { Text("Nombre completo", color = Color.Gray) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color(0xFFD4E6D4),
+                    unfocusedContainerColor = Color(0xFFD4E6D4),
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                shape = RoundedCornerShape(8.dp),
+                singleLine = true,
+                enabled = !uiState.isLoading
+            )
+
+            // Campo Email
             TextField(
                 value = uiState.email,
                 onValueChange = viewModel::onEmailChange,
@@ -168,11 +169,32 @@ fun LoginScreen(
                 enabled = !uiState.isLoading
             )
 
-            // Campo Contraseña (FUNCIONAL)
+            // Campo Contraseña
             TextField(
                 value = uiState.password,
                 onValueChange = viewModel::onPasswordChange,
-                placeholder = { Text("Contraseña", color = Color.Gray) },
+                placeholder = { Text("Contraseña (mínimo 6 caracteres)", color = Color.Gray) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color(0xFFD4E6D4),
+                    unfocusedContainerColor = Color(0xFFD4E6D4),
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                shape = RoundedCornerShape(8.dp),
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                singleLine = true,
+                enabled = !uiState.isLoading
+            )
+
+            // Campo Confirmar Contraseña
+            TextField(
+                value = uiState.confirmPassword,
+                onValueChange = viewModel::onConfirmPasswordChange,
+                placeholder = { Text("Confirmar contraseña", color = Color.Gray) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 24.dp),
@@ -189,9 +211,9 @@ fun LoginScreen(
                 enabled = !uiState.isLoading
             )
 
-            // Botón Entrar (FUNCIONAL)
+            // Botón Crear Cuenta
             Button(
-                onClick = viewModel::onLoginClick,
+                onClick = viewModel::onRegisterClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -209,7 +231,7 @@ fun LoginScreen(
                     )
                 } else {
                     Text(
-                        "Entrar",
+                        "Crear cuenta",
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp
@@ -217,87 +239,21 @@ fun LoginScreen(
                 }
             }
 
-            // Texto "¿Olvidaste tu contraseña?" (solo visual por ahora)
-            Text(
-                text = "¿Olvidaste tu contraseña?",
-                color = Color.Gray,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-
-            // Texto "¿No tienes cuenta? Regístrate" (FUNCIONAL)
+            // Texto "¿Ya tienes cuenta? Inicia sesión"
             Row(
-                modifier = Modifier.clickable { onRegisterClick() }
+                modifier = Modifier.clickable { onBackClick() }
             ) {
                 Text(
-                    text = "¿No tienes cuenta? ",
+                    text = "¿Ya tienes cuenta? ",
                     color = Color.Gray,
                     fontSize = 14.sp
                 )
                 Text(
-                    text = "Regístrate",
+                    text = "Inicia sesión",
                     color = Color(0xFF2196F3),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold
                 )
-            }
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // Divisor con "O"
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp)
-            ) {
-                Divider(
-                    modifier = Modifier.weight(1f),
-                    color = Color.Gray,
-                    thickness = 1.dp
-                )
-                Text(
-                    text = " O ",
-                    color = Color.Gray,
-                    fontSize = 14.sp
-                )
-                Divider(
-                    modifier = Modifier.weight(1f),
-                    color = Color.Gray,
-                    thickness = 1.dp
-                )
-            }
-
-            // Botón de Google (FUNCIONAL)
-            Button(
-                onClick = viewModel::onGoogleLoginClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White
-                ),
-                shape = RoundedCornerShape(8.dp),
-                border = BorderStroke(1.dp, Color.Gray),
-                elevation = ButtonDefaults.buttonElevation(4.dp),
-                enabled = !uiState.isLoading
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "🔍",
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
-                    Text(
-                        "Iniciar sesión con Google",
-                        color = Color.Black,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 16.sp
-                    )
-                }
             }
         }
     }
