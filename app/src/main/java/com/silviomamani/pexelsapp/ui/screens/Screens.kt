@@ -8,4 +8,5 @@ sealed class Screens(val route: String) {
     object PexelsVideosDetail : Screens("pexels_videos_detail_screen")
     object Home : Screens("home")
     object Register : Screens("register")
+
 }

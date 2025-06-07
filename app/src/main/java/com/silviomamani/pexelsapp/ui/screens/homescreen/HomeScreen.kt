@@ -1,6 +1,8 @@
 package com.silviomamani.pexelsapp.ui.screens.homescreen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,11 +12,28 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.PlayCircle
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -28,11 +47,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
+import com.silviomamani.pexelsapp.photos.Fotos
+import com.silviomamani.pexelsapp.photos.Videos
 import com.silviomamani.pexelsapp.ui.screens.Screens
 import com.silviomamani.pexelsapp.ui.screens.commons.PexelsItem
 import com.silviomamani.pexelsapp.ui.screens.commons.PexelsUIList
@@ -49,10 +76,6 @@ fun HomeScreen(
     homeViewModel: HomeScreenViewModel = viewModel()
 ) {
     val state by homeViewModel.state.collectAsState()
-    var searchQuery by remember { mutableStateOf("") }
-    var searchType by remember { mutableStateOf(SearchType.PHOTOS) }
-    var expanded by remember { mutableStateOf(false) }
-
 
     LaunchedEffect(state.selectedSection) {
         when (state.selectedSection) {
@@ -62,199 +85,356 @@ fun HomeScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFE8F5E9))
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text("Hola, $userName", fontWeight = FontWeight.Bold)
-            Button(onClick = onLogoutClick) { Text("Logout") }
-        }
-
-
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            Section.entries.forEach { section ->
-                TextButton(onClick = { homeViewModel.selectSection(section) }) {
-                    Text(
-                        section.name.lowercase().replaceFirstChar { it.uppercase() },
-                        fontWeight = if (section == state.selectedSection) FontWeight.Bold else FontWeight.Normal
+        // Imagen de fondo - Puedes usar un color de fondo si no tienes la imagen
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFF1976D2),
+                            Color(0xFF42A5F5)
+                        )
                     )
+                )
+        )
+
+        // Overlay oscuro para mejorar legibilidad
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.3f))
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            // Header
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = userName,
+                    color = Color.White,
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold
+                )
+                Button(
+                    onClick = onLogoutClick,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White.copy(alpha = 0.9f),
+                        contentColor = Color.Black
+                    )
+                ) {
+                    Text("Iniciar sesión")
                 }
             }
-        }
 
+            Spacer(modifier = Modifier.height(32.dp))
 
-        if (state.selectedSection == Section.PHOTOS || state.selectedSection == Section.VIDEOS) {
-            Spacer(modifier = Modifier.height(12.dp))
-
+            // Título principal
             Text(
-                text = "Buscar ${searchType.name.lowercase().replaceFirstChar { it.uppercase() }}",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                text = "Las mejores fotos, imágenes\ny videos compartidas por\ncreadores.",
+                color = Color.White,
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                lineHeight = 32.sp
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+            // Barra de búsqueda clickeable
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                    .clickable {
+                        // Navegar a la pantalla de búsqueda
+                        navController.navigate(Screens.PexelsList.route)
+                    },
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                shape = RoundedCornerShape(24.dp)
             ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Menu, // ← Cambiado
+                        contentDescription = null,
+                        tint = Color.Gray
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = "Busca fotos gratuitas",
+                        color = Color.Gray,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Icon(
+                        imageVector = Icons.Default.Search, // ← Cambiado
+                        contentDescription = null,
+                        tint = Color.Gray
+                    )
+                }
+            }
 
-                Box {
-                    Button(onClick = { expanded = true }) {
-                        Text(searchType.name)
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Tabs de navegación
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                listOf("Fotos", "Videos", "lo mas visto").forEachIndexed { index, tab ->
+                    val isSelected = when (index) {
+                        0 -> state.selectedSection == Section.PHOTOS
+                        1 -> state.selectedSection == Section.VIDEOS
+                        else -> false
                     }
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
+
+                    Card(
+                        modifier = Modifier
+                            .clickable {
+                                when (index) {
+                                    0 -> homeViewModel.selectSection(Section.PHOTOS)
+                                    1 -> homeViewModel.selectSection(Section.VIDEOS)
+                                }
+                            },
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (isSelected) Color.Black else Color.White.copy(alpha = 0.8f)
+                        ),
+                        shape = RoundedCornerShape(20.dp)
                     ) {
-                        DropdownMenuItem(
-                            text = { Text("FOTOS") },
-                            onClick = {
-                                searchType = SearchType.PHOTOS
-                                expanded = false
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text("VIDEOS") },
-                            onClick = {
-                                searchType = SearchType.VIDEOS
-                                expanded = false
-                            }
+                        Text(
+                            text = tab,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                            color = if (isSelected) Color.White else Color.Black,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                         )
                     }
                 }
+            }
 
-                Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
+            // Título de sección
+            Text(
+                text = "Fotos de stock gratuitas",
+                color = Color.White,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
 
-                TextField(
-                    value = searchQuery,
-                    onValueChange = { searchQuery = it },
-                    modifier = Modifier.weight(1f),
-                    label = { Text("Buscar ${searchType.name.lowercase()}") },
-                    singleLine = true
-                )
+            Spacer(modifier = Modifier.height(12.dp))
 
-                Spacer(modifier = Modifier.width(12.dp))
-
-
-                Button(
-                    onClick = {
-
-                        photoViewModel.onSearchTypeChange(searchType)
-                        photoViewModel.searchChange(searchQuery)
-                        photoViewModel.fetchResults()
+            // Contenido principal
+            when {
+                state.isLoading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = Color.White)
                     }
-                ) {
-                    Text("Buscar")
+                }
+
+                state.errorMessage != null -> {
+                    Text("Error: ${state.errorMessage}", color = Color.Red)
+                }
+
+                state.selectedSection == Section.PHOTOS -> {
+                    val photos = photoViewModel.recommendedPhotos.collectAsState().value
+                    LazyVerticalStaggeredGrid(
+                        columns = StaggeredGridCells.Fixed(2),
+                        verticalItemSpacing = 8.dp,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(photos) { photo ->
+                            PhotoCard(
+                                photo = photo,
+                                onClick = {
+                                    navController.navigate(Screens.PexelsDetail.route + "/${photo.id}")
+                                }
+                            )
+                        }
+                    }
+                }
+
+                state.selectedSection == Section.VIDEOS -> {
+                    val videos = photoViewModel.recommendedVideos.collectAsState().value
+                    LazyVerticalStaggeredGrid(
+                        columns = StaggeredGridCells.Fixed(2),
+                        verticalItemSpacing = 8.dp,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(videos) { video ->
+                            VideoCard(
+                                video = video,
+                                onClick = {
+                                    navController.navigate(Screens.PexelsVideosDetail.route + "/${video.id}")
+                                }
+                            )
+                        }
+                    }
+                }
+
+                else -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("Sección aún no implementada.", color = Color.White)
+                    }
                 }
             }
         }
 
+        // Bottom Navigation
+        Card(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(16.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            shape = RoundedCornerShape(24.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                BottomNavItem(
+                    icon = Icons.Default.Home, // ← Cambiado
+                    label = "Inicio",
+                    isSelected = true,
+                    onClick = { }
+                )
+                BottomNavItem(
+                    icon = Icons.Default.Favorite, // ← Cambiado
+                    label = "Favoritos",
+                    isSelected = false,
+                    onClick = { homeViewModel.selectSection(Section.FAVORITES) }
+                )
+                BottomNavItem(
+                    icon = Icons.Default.Upload, // ← Cambiado
+                    label = "Subir",
+                    isSelected = false,
+                    onClick = { homeViewModel.selectSection(Section.UPLOAD) }
+                )
+            }
+        }
+    }
+}
 
-        if (state.selectedSection == Section.FAVORITES || state.selectedSection == Section.UPLOAD) {
-            Text(
-                text = when (state.selectedSection) {
-                    Section.FAVORITES -> "Tus favoritos"
-                    Section.UPLOAD -> "Subir contenido"
-                    else -> ""
-                },
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(16.dp)
+@Composable
+fun PhotoCard(
+    photo: Fotos,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Box {
+            AsyncImage(
+                model = photo.src.medium,
+                contentDescription = photo.alt,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                contentScale = ContentScale.Crop
+            )
+            // Icono de favorito
+            Icon(
+                imageVector = Icons.Default.FavoriteBorder, // ← Cambiado
+                contentDescription = "Favorito",
+                tint = Color.White,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(8.dp)
+                    .clickable { /* Acción de favorito */ }
             )
         }
+    }
+}
 
-
-        when {
-            state.isLoading -> {
-                CircularProgressIndicator(Modifier.align(Alignment.CenterHorizontally))
-            }
-
-            state.errorMessage != null -> {
-                Text("Error: ${state.errorMessage}", color = Color.Red)
-            }
-
-            state.selectedSection == Section.PHOTOS -> {
-
-                if (searchQuery.isNotEmpty() && photoViewModel.uiState.searchQuery.isNotEmpty()) {
-
-                    PexelsUIList(
-                        pexelsList = photoViewModel.combinedList,
-                        modifier = Modifier.fillMaxSize(),
-                        onClick = { id, isVideo ->
-                            if (isVideo) {
-                                navController.navigate(Screens.PexelsVideosDetail.route + "/$id")
-                            } else {
-                                navController.navigate(Screens.PexelsDetail.route + "/$id")
-                            }
-                        }
-                    )
-                } else {
-
-                    val photos = photoViewModel.recommendedPhotos.collectAsState().value
-                    val photoItems = photos.map { PexelsItem.PhotoItem(foto = it) }
-                    PexelsUIList(
-                        pexelsList = photoItems,
-                        modifier = Modifier.fillMaxSize(),
-                        onClick = { id, isVideo ->
-                            navController.navigate(Screens.PexelsDetail.route + "/$id")
-                        }
-                    )
-                }
-            }
-
-            state.selectedSection == Section.VIDEOS -> {
-
-                if (searchQuery.isNotEmpty() && photoViewModel.uiState.searchQuery.isNotEmpty()) {
-
-                    PexelsUIList(
-                        pexelsList = photoViewModel.combinedList,
-                        modifier = Modifier.fillMaxSize(),
-                        onClick = { id, isVideo ->
-                            if (isVideo) {
-                                navController.navigate(Screens.PexelsVideosDetail.route + "/$id")
-                            } else {
-                                navController.navigate(Screens.PexelsDetail.route + "/$id")
-                            }
-                        }
-                    )
-                } else {
-
-                    val videos = photoViewModel.recommendedVideos.collectAsState().value
-                    val videoItems = videos.map { PexelsItem.VideoItem(video = it) }
-                    PexelsUIList(
-                        pexelsList = videoItems,
-                        modifier = Modifier.fillMaxSize(),
-                        onClick = { id, isVideo ->
-                            navController.navigate(Screens.PexelsVideosDetail.route + "/$id")
-                        }
-                    )
-                }
-            }
-
-            state.selectedSection == Section.UPLOAD -> {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Button(onClick = { /* NO HACER NADA */ }) {
-                        Text("Subir Foto (No Funciona)")
-                    }
-                }
-            }
-
-            else -> {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("Sección aún no implementada.")
-                }
-            }
+@Composable
+fun VideoCard(
+    video: Videos,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Box {
+            AsyncImage(
+                model = video.image,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                contentScale = ContentScale.Crop
+            )
+            // Icono de play para videos
+            Icon(
+                imageVector = Icons.Default.PlayCircle, // ← Cambiado
+                contentDescription = "Play",
+                tint = Color.White,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(48.dp)
+            )
+            // Icono de favorito
+            Icon(
+                imageVector = Icons.Default.FavoriteBorder, // ← Cambiado
+                contentDescription = "Favorito",
+                tint = Color.White,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(8.dp)
+                    .clickable { /* Acción de favorito */ }
+            )
         }
+    }
+}
+
+@Composable
+fun BottomNavItem(
+    icon: ImageVector, // ← Cambiado de Int a ImageVector
+    label: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.clickable { onClick() }
+    ) {
+        Icon(
+            imageVector = icon, // ← Cambiado
+            contentDescription = label,
+            tint = if (isSelected) Color.Blue else Color.Gray
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodySmall,
+            color = if (isSelected) Color.Blue else Color.Gray
+        )
     }
 }

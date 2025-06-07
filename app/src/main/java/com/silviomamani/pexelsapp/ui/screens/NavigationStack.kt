@@ -11,7 +11,9 @@ import com.silviomamani.pexelsapp.ui.screens.login.LoginScreen
 import com.silviomamani.pexelsapp.ui.screens.pexelsdetail.PexelsDetailScreen
 import com.silviomamani.pexelsapp.ui.screens.pexelslist.PexelsListScreen
 import com.silviomamani.pexelsapp.ui.screens.pexelsvideodetail.PexelsVideoDetailScreen
-import com.silviomamani.pexelsapp.ui.screens.splash.SplashScreen@Composable
+import com.silviomamani.pexelsapp.ui.screens.splash.SplashScreen
+
+@Composable
 fun NavigationStack(
     onGoogleLoginClick: () -> Unit,
     navController: NavHostController,
@@ -72,5 +74,7 @@ fun NavigationStack(
             val videoId = backStackEntry.arguments?.getString("videoId")?.toIntOrNull() ?: 0
             PexelsVideoDetailScreen(videoId)
         }
+
     }
+
 }
