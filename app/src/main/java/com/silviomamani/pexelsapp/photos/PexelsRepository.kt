@@ -32,5 +32,23 @@ class PexelsRepository(
     override suspend fun getPopularVideos(): List<Videos> {
         return pexelsDataSource.getPopularVideos()
     }
+
+
+
+    override suspend fun addToFavorites(foto: Fotos) {
+        pexelsDataSource.addToFavorites(foto)
+    }
+
+    override suspend fun removeFromFavorites(fotoId: Int) {
+        pexelsDataSource.removeFromFavorites(fotoId)
+    }
+
+    override suspend fun isFavorite(fotoId: Int): Boolean {
+        return pexelsDataSource.isFavorite(fotoId)
+    }
+
+    override suspend fun getFavorites(): List<Fotos> {
+        return pexelsDataSource.getFavorites()
+    }
 }
 

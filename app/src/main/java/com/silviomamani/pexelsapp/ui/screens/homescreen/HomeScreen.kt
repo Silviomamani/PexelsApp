@@ -88,7 +88,6 @@ fun HomeScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Imagen de fondo - Puedes usar un color de fondo si no tienes la imagen
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -102,7 +101,6 @@ fun HomeScreen(
                 )
         )
 
-        // Overlay oscuro para mejorar legibilidad
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -133,7 +131,7 @@ fun HomeScreen(
                         contentColor = Color.Black
                     )
                 ) {
-                    Text("Iniciar sesión")
+                    Text("Cerrar Sesion")
                 }
             }
 
@@ -416,7 +414,7 @@ fun VideoCard(
 
 @Composable
 fun BottomNavItem(
-    icon: ImageVector, // ← Cambiado de Int a ImageVector
+    icon: ImageVector,
     label: String,
     isSelected: Boolean,
     onClick: () -> Unit

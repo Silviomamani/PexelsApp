@@ -6,76 +6,67 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.silviomamani.pexelsapp.domain.IPexelsRepository
-import com.silviomamani.pexelsapp.photos.Fotos
 import com.silviomamani.pexelsapp.photos.PexelsRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
+
 
 class PexelsDetailScreenViewModel(
     private val pexelsRepository: IPexelsRepository = PexelsRepository()
 ) : ViewModel() {
+
     var uiState by mutableStateOf(PexelsDetailScreenState())
-    private set
+        private set
 
-    private var fetcheJob: Job? = null
+    private var fetchJob: Job? = null
 
-    fun fetchFoto() {
-        fetcheJob?.cancel()
-        fetcheJob = viewModelScope.launch {
-            val foto = pexelsRepository.fetchFoto(uiState.pexelsId)
+    fun setPexelsId(pexelsId: Int) {
+        uiState = uiState.copy(pexelsId = pexelsId)
+        fetchFoto()
+        checkIfFavorite()
+    }
 
-            val db = FirebaseFirestore.getInstance()
-            val currentUser = FirebaseAuth.getInstance().currentUser
-            val email = currentUser?.email ?: throw Exception("Usuario no logueado")
-
-            val docRef = db.collection("usuarios")
-                .document(email)
-                .collection("favoritos")
-                .document(foto.id.toString())
-
-            val snapshot = docRef.get().await()
-            val isFavorito = snapshot.exists()
-
-            uiState = uiState.copy(
-                pexelsDetail = foto,
-                isFavorito = isFavorito
-            )
+    private fun fetchFoto() {
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch {
+            try {
+                val foto = pexelsRepository.fetchFoto(uiState.pexelsId)
+                uiState = uiState.copy(pexelsDetail = foto)
+            } catch (e: Exception) {
+                Log.e("PexelsDetail", "Error al cargar foto: ${e.message}")
+            }
         }
     }
-    fun setPexelsId(pexelsId: Int): Unit{
-        uiState= uiState.copy(pexelsId = pexelsId, pexelsDetail = uiState.pexelsDetail)
-        fetchFoto()
+
+    private fun checkIfFavorite() {
+        viewModelScope.launch {
+            try {
+                val isFav = pexelsRepository.isFavorite(uiState.pexelsId)
+                uiState = uiState.copy(isFavorito = isFav)
+            } catch (e: Exception) {
+                Log.e("PexelsDetail", "Error al verificar favorito: ${e.message}")
+            }
+        }
     }
 
     fun toggleFavorito() {
         viewModelScope.launch {
             try {
-                val foto = uiState.pexelsDetail
-                val db = FirebaseFirestore.getInstance()
-                val currentUser = FirebaseAuth.getInstance().currentUser
-                val email = currentUser?.email ?: throw Exception("Usuario no logueado")
-
-                val docRef = db.collection("usuarios")
-                    .document(email)
-                    .collection("favoritos")
-                    .document(foto.id.toString())
-
-                val snapshot = docRef.get().await()
-
-                if (snapshot.exists()) {
-                    docRef.delete().await()
+                if (uiState.isFavorito) {
+                    // Quitar de favoritos
+                    pexelsRepository.removeFromFavorites(uiState.pexelsId)
                     uiState = uiState.copy(isFavorito = false)
+                    Log.d("PexelsDetail", "Foto eliminada de favoritos")
                 } else {
-                    docRef.set(foto).await()
+                    // Agregar a favoritos
+                    pexelsRepository.addToFavorites(uiState.pexelsDetail)
                     uiState = uiState.copy(isFavorito = true)
+                    Log.d("PexelsDetail", "Foto agregada a favoritos")
                 }
             } catch (e: Exception) {
-                Log.e("Favoritos", "Error al guardar/eliminar favorito", e)
+                Log.e("PexelsDetail", "Error al cambiar favorito: ${e.message}")
             }
         }
     }
-    }
+}

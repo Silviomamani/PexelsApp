@@ -10,5 +10,6 @@ data class PexelsListScreenState(
     val pexelsList: List<Fotos> = emptyList(),
     val pexelsVideosList: List<Videos> = emptyList(),
     val searchQuery: String = "",
-    val searchType: SearchType = SearchType.PHOTOS
+    val searchType: SearchType = SearchType.PHOTOS,
+    val hasSearched: Boolean = false
 )

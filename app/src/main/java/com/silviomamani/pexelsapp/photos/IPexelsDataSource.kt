@@ -5,8 +5,11 @@ interface IPexelsDataSource {
     suspend fun getPexelsById(pexelsId: Int) : Fotos
     suspend fun getPexelsVideoList(search: String): List<Videos>
     suspend fun getVideoById(videoId: Int): Videos
-
     suspend fun getPopularFotos(): List<Fotos>
     suspend fun getPopularVideos(): List<Videos>
 
+    suspend fun addToFavorites(foto: Fotos)
+    suspend fun removeFromFavorites(fotoId: Int)
+    suspend fun isFavorite(fotoId: Int): Boolean
+    suspend fun getFavorites(): List<Fotos>
 }

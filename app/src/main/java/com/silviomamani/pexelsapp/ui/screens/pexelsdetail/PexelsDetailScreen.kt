@@ -8,11 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 
 
 @Composable
 fun PexelsDetailScreen(
     pexelsId: Int,
+    navController: NavHostController,
     modifier: Modifier = Modifier,
     vm: PexelsDetailScreenViewModel = viewModel()
 ) {
@@ -27,6 +29,7 @@ fun PexelsDetailScreen(
             fotos = vm.uiState.pexelsDetail,
             isFavorito = vm.uiState.isFavorito,
             onToggleFavorito = { vm.toggleFavorito() },
+            onBackClick = { navController.popBackStack() },
             modifier = modifier
         )
     }

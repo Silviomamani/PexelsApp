@@ -36,6 +36,22 @@ class PexelsTestDataSource : IPexelsDataSource{
         TODO("Not yet implemented")
     }
 
+    override suspend fun addToFavorites(foto: Fotos) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeFromFavorites(fotoId: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun isFavorite(fotoId: Int): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getFavorites(): List<Fotos> {
+        TODO("Not yet implemented")
+    }
+
     private var json = """
     {
        "page": 1,

@@ -14,4 +14,9 @@ interface IPexelsRepository {
 
     suspend fun getPopularFotos(): List<Fotos>
     suspend fun getPopularVideos(): List<Videos>
+
+    suspend fun addToFavorites(foto: Fotos)
+    suspend fun removeFromFavorites(fotoId: Int)
+    suspend fun isFavorite(fotoId: Int): Boolean
+    suspend fun getFavorites(): List<Fotos>
 }
