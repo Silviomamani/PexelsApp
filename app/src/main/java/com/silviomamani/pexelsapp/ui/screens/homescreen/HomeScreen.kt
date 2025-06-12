@@ -84,6 +84,7 @@ fun HomeScreen(
         when (state.selectedSection) {
             Section.PHOTOS -> photoViewModel.fetchRecommendedPhotos()
             Section.VIDEOS -> photoViewModel.fetchRecommendedVideos()
+            Section.MOSTVIEWED -> photoViewModel.fetchMostViewed()
             else -> {}
         }
     }
@@ -97,8 +98,8 @@ fun HomeScreen(
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            Color(0xFF1976D2),
-                            Color(0xFF42A5F5)
+                            Color(0xFFE6F0E6),
+                            Color(0xFFE6F0E6)
                         )
                     )
                 )
@@ -198,6 +199,7 @@ fun HomeScreen(
                     val isSelected = when (index) {
                         0 -> state.selectedSection == Section.PHOTOS
                         1 -> state.selectedSection == Section.VIDEOS
+                        2 -> state.selectedSection == Section.MOSTVIEWED
                         else -> false
                     }
 
@@ -207,6 +209,7 @@ fun HomeScreen(
                                 when (index) {
                                     0 -> homeViewModel.selectSection(Section.PHOTOS)
                                     1 -> homeViewModel.selectSection(Section.VIDEOS)
+                                    2 -> homeViewModel.selectSection(Section.MOSTVIEWED)
                                 }
                             },
                         colors = CardDefaults.cardColors(
@@ -283,6 +286,24 @@ fun HomeScreen(
                                 video = video,
                                 onClick = {
                                     navController.navigate(Screens.PexelsVideosDetail.route + "/${video.id}")
+                                }
+                            )
+                        }
+                    }
+                }
+                state.selectedSection == Section.MOSTVIEWED -> {
+                    val mostViewed = photoViewModel.mostViewedPhotos.collectAsState().value
+                    LazyVerticalStaggeredGrid(
+                        columns = StaggeredGridCells.Fixed(2),
+                        verticalItemSpacing = 8.dp,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(mostViewed) { photo ->
+                            PhotoCard(
+                                photo = photo,
+                                onClick = {
+                                    navController.navigate(Screens.PexelsDetail.route + "/${photo.id}")
                                 }
                             )
                         }

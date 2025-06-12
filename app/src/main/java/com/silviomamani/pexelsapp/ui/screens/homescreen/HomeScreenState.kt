@@ -7,5 +7,5 @@ data class HomeScreenState(
 )
 
 enum class Section {
-    PHOTOS, VIDEOS, FAVORITES, UPLOAD
+    PHOTOS, VIDEOS, FAVORITES, UPLOAD, MOSTVIEWED
 }

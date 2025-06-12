@@ -97,6 +97,26 @@ class PexelsApiDataSource :IPexelsDataSource{
             emptyList()
         }
     }
+
+    override suspend fun getMostViewed(): List<Fotos> {
+        Log.d("PexelsApp", "PexelsApiDataSource.getPopularFotos")
+        return try {
+            val result = RetrofitInstance.pexelsApi.getMostViewed()
+            result.photos
+        } catch (e: HttpException) {
+            Log.e("PexelsApp", "HTTP error en getPopularFotos: ${e.code()} ${e.localizedMessage}")
+            emptyList()
+        } catch (e: IOException) {
+            Log.e("PexelsApp", "Network error en getPopularFotos: ${e.localizedMessage}")
+            emptyList()
+        } catch (e: Exception) {
+            Log.e("PexelsApp", "Unexpected error en getPopularFotos: ${e.localizedMessage}")
+            emptyList()
+        }
+    }
+
+
+
     override suspend fun addToFavorites(foto: Fotos) {
         val db = FirebaseFirestore.getInstance()
         val currentUser = FirebaseAuth.getInstance().currentUser

@@ -88,8 +88,12 @@ init{
     private val _recommendedPhotos = MutableStateFlow<List<Fotos>>(emptyList())
     val recommendedPhotos: StateFlow<List<Fotos>> = _recommendedPhotos
 
+
     private val _recommendedVideos = MutableStateFlow<List<Videos>>(emptyList())
     val recommendedVideos: StateFlow<List<Videos>> = _recommendedVideos
+
+    private val _mostViewed = MutableStateFlow<List<Fotos>>(emptyList())
+    val mostViewedPhotos: StateFlow<List<Fotos>> = _mostViewed
 
 
     fun fetchRecommendedPhotos() {
@@ -110,6 +114,16 @@ init{
                 _recommendedVideos.value = videos
             } catch (e: IOException) {
                 Log.e("PexelsApp", "Error al recuperar videos recomendados: ${e.message}")
+            }
+        }
+    }
+    fun fetchMostViewed() {
+        viewModelScope.launch {
+            try {
+                val fotos = pexelsRepository.getMostViewed()
+                _mostViewed.value = fotos
+            } catch (e: IOException) {
+                Log.e("PexelsApp", "Error al recuperar lo más visto: ${e.message}")
             }
         }
     }

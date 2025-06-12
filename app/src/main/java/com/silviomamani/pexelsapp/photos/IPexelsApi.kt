@@ -38,5 +38,12 @@ interface IPexelsApi {
     suspend fun getPopularFotos(
         @Query("per_page") perPage: Int = 12
     ): PexelsResult
+
+    @GET("curated")
+    suspend fun getMostViewed(
+        @Query("per_page") perPage: Int = 12
+    ):PexelsResult
 }
+
+
 

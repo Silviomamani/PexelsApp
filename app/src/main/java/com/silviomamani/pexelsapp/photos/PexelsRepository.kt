@@ -21,6 +21,11 @@ class PexelsRepository(
         return pexelsDataSource.getPopularFotos()
     }
 
+    override suspend fun getMostViewed(): List<Fotos> {
+        return pexelsDataSource.getMostViewed()
+    }
+
+
 
 
     override suspend fun fetchPexelsVideos(search: String): List<Videos>{
@@ -32,9 +37,6 @@ class PexelsRepository(
     override suspend fun getPopularVideos(): List<Videos> {
         return pexelsDataSource.getPopularVideos()
     }
-
-
-
     override suspend fun addToFavorites(foto: Fotos) {
         pexelsDataSource.addToFavorites(foto)
     }

@@ -64,19 +64,19 @@ fun PexelsUIItemDetail(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     BottomNavItem(
-                        icon = Icons.Default.Home, // ← Cambiado
+                        icon = Icons.Default.Home,
                         label = "Inicio",
                         isSelected = true,
                         onClick = { }
                     )
                     BottomNavItem(
-                        icon = Icons.Default.Favorite, // ← Cambiado
+                        icon = Icons.Default.Favorite,
                         label = "Favoritos",
                         isSelected = false,
                         onClick = { }
                     )
                     BottomNavItem(
-                        icon = Icons.Default.Upload, // ← Cambiado
+                        icon = Icons.Default.Upload,
                         label = "Subir",
                         isSelected = false,
                         onClick = { }

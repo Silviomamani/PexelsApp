@@ -8,6 +8,8 @@ interface IPexelsDataSource {
     suspend fun getPopularFotos(): List<Fotos>
     suspend fun getPopularVideos(): List<Videos>
 
+    suspend fun getMostViewed(): List<Fotos>
+
     suspend fun addToFavorites(foto: Fotos)
     suspend fun removeFromFavorites(fotoId: Int)
     suspend fun isFavorite(fotoId: Int): Boolean
