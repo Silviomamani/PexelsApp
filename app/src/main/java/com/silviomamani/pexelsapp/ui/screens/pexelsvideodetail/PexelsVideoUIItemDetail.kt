@@ -15,7 +15,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -44,6 +47,8 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.silviomamani.pexelsapp.photos.Videos
+import com.silviomamani.pexelsapp.ui.screens.commons.BottomNavItem
+import com.silviomamani.pexelsapp.ui.screens.homescreen.Section
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,6 +87,41 @@ fun PexelsVideoUIItemDetail(
                     containerColor = Color(0xFFEAF6E9)
                 )
             )
+        },
+        bottomBar = {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                shape = RoundedCornerShape(24.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    BottomNavItem(
+                        icon = Icons.Default.Home,
+                        label = "Inicio",
+                        isSelected = true,
+                        onClick = { }
+                    )
+                    BottomNavItem(
+                        icon = Icons.Default.Favorite,
+                        label = "Favoritos",
+                        isSelected = false,
+                        onClick = {  }
+                    )
+                    BottomNavItem(
+                        icon = Icons.Default.Upload,
+                        label = "Subir",
+                        isSelected = false,
+                        onClick = { }
+                    )
+                }
+            }
         }
     ) { paddingValues ->
         Column(

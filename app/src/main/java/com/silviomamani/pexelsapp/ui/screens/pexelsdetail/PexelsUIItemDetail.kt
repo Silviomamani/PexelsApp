@@ -1,7 +1,6 @@
 package com.silviomamani.pexelsapp.ui.screens.pexelsdetail
 
-import android.content.Intent
-import android.net.Uri
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -14,8 +13,10 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.Upload
+
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,10 +27,11 @@ import coil.compose.AsyncImage
 import com.silviomamani.pexelsapp.photos.Fotos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
+
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-
+import com.silviomamani.pexelsapp.ui.screens.commons.BottomNavItem
+import com.silviomamani.pexelsapp.ui.screens.homescreen.Section
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,83 +50,42 @@ fun PexelsUIItemDetail(
     Scaffold(
         containerColor = Color(0xFFE4F5E4),
         bottomBar = {
-            NavigationBar(
-                containerColor = Color(0xFFE4F5E4),
-                contentColor = Color(0xFF4A6741)
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                shape = RoundedCornerShape(24.dp)
             ) {
-                NavigationBarItem(
-                    selected = false,
-                    onClick = onHomeClick,
-                    icon = {
-                        Icon(
-                            Icons.Default.Place,
-                            contentDescription = "Inicio",
-                            tint = Color(0xFF4A6741)
-                        )
-                    },
-                    label = {
-                        Text(
-                            "Inicio",
-                            color = Color(0xFF4A6741)
-                        )
-                    },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color(0xFF4A6741),
-                        unselectedIconColor = Color(0xFF4A6741),
-                        selectedTextColor = Color(0xFF4A6741),
-                        unselectedTextColor = Color(0xFF4A6741),
-                        indicatorColor = Color(0xFFB8D4B8)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    BottomNavItem(
+                        icon = Icons.Default.Home, // ← Cambiado
+                        label = "Inicio",
+                        isSelected = true,
+                        onClick = { }
                     )
-                )
-                NavigationBarItem(
-                    selected = true,
-                    onClick = {},
-                    icon = {
-                        Icon(
-                            Icons.Default.FavoriteBorder,
-                            contentDescription = "Favoritos",
-                            tint = Color(0xFF4A6741)
-                        )
-                    },
-                    label = {
-                        Text(
-                            "Favoritos",
-                            color = Color(0xFF4A6741)
-                        )
-                    },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color(0xFF4A6741),
-                        unselectedIconColor = Color(0xFF4A6741),
-                        selectedTextColor = Color(0xFF4A6741),
-                        unselectedTextColor = Color(0xFF4A6741),
-                        indicatorColor = Color(0xFFB8D4B8)
+                    BottomNavItem(
+                        icon = Icons.Default.Favorite, // ← Cambiado
+                        label = "Favoritos",
+                        isSelected = false,
+                        onClick = { }
                     )
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = {},
-                    icon = {
-                        Icon(
-                            Icons.Default.CloudUpload,
-                            contentDescription = "Subir",
-                            tint = Color(0xFF4A6741)
-                        )
-                    },
-                    label = {
-                        Text(
-                            "Subir",
-                            color = Color(0xFF4A6741)
-                        )
-                    },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color(0xFF4A6741),
-                        unselectedIconColor = Color(0xFF4A6741),
-                        selectedTextColor = Color(0xFF4A6741),
-                        unselectedTextColor = Color(0xFF4A6741),
-                        indicatorColor = Color(0xFFB8D4B8)
+                    BottomNavItem(
+                        icon = Icons.Default.Upload, // ← Cambiado
+                        label = "Subir",
+                        isSelected = false,
+                        onClick = { }
                     )
-                )
+                }
             }
+
+
+
         },
         topBar = {
             TopAppBar(

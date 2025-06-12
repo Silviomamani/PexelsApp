@@ -61,9 +61,12 @@ import coil.compose.AsyncImage
 import com.silviomamani.pexelsapp.photos.Fotos
 import com.silviomamani.pexelsapp.photos.Videos
 import com.silviomamani.pexelsapp.ui.screens.Screens
+import com.silviomamani.pexelsapp.ui.screens.commons.BottomNavItem
 import com.silviomamani.pexelsapp.ui.screens.commons.PexelsItem
 import com.silviomamani.pexelsapp.ui.screens.commons.PexelsUIList
+import com.silviomamani.pexelsapp.ui.screens.commons.PhotoCard
 import com.silviomamani.pexelsapp.ui.screens.commons.SearchType
+import com.silviomamani.pexelsapp.ui.screens.commons.VideoCard
 import com.silviomamani.pexelsapp.ui.screens.pexelslist.PexelsListScreenViewModel
 
 
@@ -225,7 +228,7 @@ fun HomeScreen(
 
             // Título de sección
             Text(
-                text = "Fotos de stock gratuitas",
+                text = "Contenido de stock gratuitas",
                 color = Color.White,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
@@ -332,87 +335,5 @@ fun HomeScreen(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun PhotoCard(
-    photo: Fotos,
-    onClick: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        shape = RoundedCornerShape(12.dp)
-    ) {
-        Box {
-            AsyncImage(
-                model = photo.src.medium,
-                contentDescription = photo.alt,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                contentScale = ContentScale.Crop
-            )
-        }
-    }
-}
-
-@Composable
-fun VideoCard(
-    video: Videos,
-    onClick: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        shape = RoundedCornerShape(12.dp)
-    ) {
-        Box {
-            AsyncImage(
-                model = video.image,
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                contentScale = ContentScale.Crop
-            )
-            // Icono de play para videos
-            Icon(
-                imageVector = Icons.Default.PlayCircle, // ← Cambiado
-                contentDescription = "Play",
-                tint = Color.White,
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(48.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun BottomNavItem(
-    icon: ImageVector,
-    label: String,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { onClick() }
-    ) {
-        Icon(
-            imageVector = icon, // ← Cambiado
-            contentDescription = label,
-            tint = if (isSelected) Color.Blue else Color.Gray
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodySmall,
-            color = if (isSelected) Color.Blue else Color.Gray
-        )
     }
 }

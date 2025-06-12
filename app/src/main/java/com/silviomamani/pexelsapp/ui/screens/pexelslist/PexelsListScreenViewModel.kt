@@ -95,7 +95,7 @@ init{
     fun fetchRecommendedPhotos() {
         viewModelScope.launch {
             try {
-                val photos = pexelsRepository.fetchPexels("nature") // o cualquier término genérico
+                val photos = pexelsRepository.getPopularFotos()
                 _recommendedPhotos.value = photos
             } catch (e: IOException) {
                 Log.e("PexelsApp", "Error al recuperar fotos recomendadas: ${e.message}")
@@ -106,7 +106,7 @@ init{
     fun fetchRecommendedVideos() {
         viewModelScope.launch {
             try {
-                val videos = pexelsRepository.fetchPexelsVideos("popular") // puede ser "popular" o algo general
+                val videos = pexelsRepository.getPopularVideos()
                 _recommendedVideos.value = videos
             } catch (e: IOException) {
                 Log.e("PexelsApp", "Error al recuperar videos recomendados: ${e.message}")
