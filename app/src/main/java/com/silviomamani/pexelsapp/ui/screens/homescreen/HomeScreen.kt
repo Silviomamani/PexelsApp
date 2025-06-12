@@ -355,16 +355,6 @@ fun PhotoCard(
                     .height(200.dp),
                 contentScale = ContentScale.Crop
             )
-            // Icono de favorito
-            Icon(
-                imageVector = Icons.Default.FavoriteBorder, // ← Cambiado
-                contentDescription = "Favorito",
-                tint = Color.White,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(8.dp)
-                    .clickable { /* Acción de favorito */ }
-            )
         }
     }
 }
@@ -397,16 +387,6 @@ fun VideoCard(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(48.dp)
-            )
-            // Icono de favorito
-            Icon(
-                imageVector = Icons.Default.FavoriteBorder, // ← Cambiado
-                contentDescription = "Favorito",
-                tint = Color.White,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(8.dp)
-                    .clickable { /* Acción de favorito */ }
             )
         }
     }

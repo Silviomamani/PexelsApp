@@ -1,5 +1,6 @@
 package com.silviomamani.pexelsapp.ui.screens.pexelsdetail
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,7 +12,6 @@ import com.silviomamani.pexelsapp.photos.PexelsRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-
 class PexelsDetailScreenViewModel(
     private val pexelsRepository: IPexelsRepository = PexelsRepository()
 ) : ViewModel() {
@@ -20,6 +20,13 @@ class PexelsDetailScreenViewModel(
         private set
 
     private var fetchJob: Job? = null
+    private var downloadManager: ImageDownloadManager? = null
+
+    fun initializeDownloadManager(context: Context) {
+        if (downloadManager == null) {
+            downloadManager = ImageDownloadManager(context)
+        }
+    }
 
     fun setPexelsId(pexelsId: Int) {
         uiState = uiState.copy(pexelsId = pexelsId)
@@ -66,6 +73,25 @@ class PexelsDetailScreenViewModel(
                 }
             } catch (e: Exception) {
                 Log.e("PexelsDetail", "Error al cambiar favorito: ${e.message}")
+            }
+        }
+    }
+
+    fun downloadImage() {
+        viewModelScope.launch {
+            uiState = uiState.copy(isDownloading = true)
+
+            try {
+                val success = downloadManager?.downloadImage(
+                    imageUrl = uiState.pexelsDetail.src.original,
+                    fileName = "pexels_${uiState.pexelsDetail.id}_${uiState.pexelsDetail.photographer.replace(" ", "_")}.jpg"
+                ) ?: false
+
+                Log.d("PexelsDetail", if (success) "Descarga exitosa" else "Error en descarga")
+            } catch (e: Exception) {
+                Log.e("PexelsDetail", "Error al descargar imagen: ${e.message}")
+            } finally {
+                uiState = uiState.copy(isDownloading = false)
             }
         }
     }

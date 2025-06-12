@@ -37,12 +37,14 @@ import androidx.compose.ui.unit.sp
 fun PexelsUIItemDetail(
     fotos: Fotos,
     isFavorito: Boolean,
+    isDownloading: Boolean,
     onToggleFavorito: () -> Unit,
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onDownloadClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    onHomeClick: () -> Unit
 ) {
 
-    val context = LocalContext.current
     Scaffold(
         containerColor = Color(0xFFE4F5E4),
         bottomBar = {
@@ -52,7 +54,7 @@ fun PexelsUIItemDetail(
             ) {
                 NavigationBarItem(
                     selected = false,
-                    onClick = {},
+                    onClick = onHomeClick,
                     icon = {
                         Icon(
                             Icons.Default.Place,
@@ -197,7 +199,7 @@ fun PexelsUIItemDetail(
                     modifier = Modifier.weight(1f)
                 )
                 Text(
-                    text = "Medidas",
+                    text = "${fotos.width} x ${fotos.height}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color(0xFF6B7B63)
                 )
@@ -230,13 +232,8 @@ fun PexelsUIItemDetail(
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                onClick = {
-                    // Usar la URL de mayor calidad disponible para descargar
-                    val downloadUrl = fotos.src.original
-                    val uri = Uri.parse(downloadUrl)
-                    val intent = Intent(Intent.ACTION_VIEW, uri)
-                    context.startActivity(intent)
-                },
+                onClick = onDownloadClick,
+                enabled = !isDownloading,
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF7BA839),
@@ -248,11 +245,30 @@ fun PexelsUIItemDetail(
                     .height(56.dp),
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
             ) {
-                Text(
-                    text = "Descargar",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Medium
-                )
+                if (isDownloading) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            color = Color.White,
+                            strokeWidth = 2.dp
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Descargando...",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                } else {
+                    Text(
+                        text = "Descargar",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(32.dp))

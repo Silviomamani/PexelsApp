@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 
@@ -18,6 +20,13 @@ fun PexelsDetailScreen(
     modifier: Modifier = Modifier,
     vm: PexelsDetailScreenViewModel = viewModel()
 ) {
+    val context = LocalContext.current
+
+
+    LaunchedEffect(Unit) {
+        vm.initializeDownloadManager(context)
+    }
+
     vm.setPexelsId(pexelsId)
 
     if (vm.uiState.pexelsDetail.id == 0) {
@@ -28,9 +37,12 @@ fun PexelsDetailScreen(
         PexelsUIItemDetail(
             fotos = vm.uiState.pexelsDetail,
             isFavorito = vm.uiState.isFavorito,
+            isDownloading = vm.uiState.isDownloading,
             onToggleFavorito = { vm.toggleFavorito() },
             onBackClick = { navController.popBackStack() },
-            modifier = modifier
+            onDownloadClick = { vm.downloadImage() },
+            modifier = modifier ,
+            onHomeClick = { navController.navigate("home")}
         )
     }
 }
