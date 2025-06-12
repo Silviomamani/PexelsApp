@@ -59,8 +59,7 @@ fun NavigationStack(
 
         composable(route = Screens.PexelsList.route) {
             PexelsListScreen(
-                navController = navController,
-                onLogoutClick = onLogoutClick
+                navController = navController
             )
         }
 

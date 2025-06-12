@@ -1,9 +1,7 @@
 package com.silviomamani.pexelsapp.photos
 
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.silviomamani.pexelsapp.domain.IPexelsRepository
-import kotlinx.coroutines.tasks.await
+
 
 class PexelsRepository(
     val pexelsDataSource: IPexelsDataSource = PexelsApiDataSource()
@@ -12,20 +10,17 @@ class PexelsRepository(
     override suspend fun fetchPexels(search: String): List<Fotos> {
         return pexelsDataSource.getPexelsList(search)
     }
-
     override suspend fun fetchFoto(pexelsId: Int): Fotos {
         return pexelsDataSource.getPexelsById(pexelsId)
     }
-
     override suspend fun getPopularFotos(): List<Fotos> {
         return pexelsDataSource.getPopularFotos()
     }
 
+
     override suspend fun getMostViewed(): List<Fotos> {
         return pexelsDataSource.getMostViewed()
     }
-
-
 
 
     override suspend fun fetchPexelsVideos(search: String): List<Videos>{
@@ -37,20 +32,37 @@ class PexelsRepository(
     override suspend fun getPopularVideos(): List<Videos> {
         return pexelsDataSource.getPopularVideos()
     }
-    override suspend fun addToFavorites(foto: Fotos) {
-        pexelsDataSource.addToFavorites(foto)
+
+
+    // Favoritos para fotos
+    override suspend fun addFotoToFavorites(foto: Fotos) {
+        pexelsDataSource.addFotoToFavorites(foto)
     }
 
-    override suspend fun removeFromFavorites(fotoId: Int) {
-        pexelsDataSource.removeFromFavorites(fotoId)
+    override suspend fun removeFotoFromFavorites(fotoId: Int) {
+        pexelsDataSource.removeFotoFromFavorites(fotoId)
     }
 
-    override suspend fun isFavorite(fotoId: Int): Boolean {
-        return pexelsDataSource.isFavorite(fotoId)
+    override suspend fun isFotoFavorite(fotoId: Int): Boolean {
+        return pexelsDataSource.isFotoFavorite(fotoId)
     }
 
-    override suspend fun getFavorites(): List<Fotos> {
-        return pexelsDataSource.getFavorites()
+    override suspend fun getFavoritesFotos(): List<Fotos> {
+        return pexelsDataSource.getFavoritesFotos()
+    }
+
+
+    // Favoritos para videos
+    override suspend fun addVideoToFavorites(video: Videos) {
+        pexelsDataSource.addVideoToFavorites(video)
+    }
+    override suspend fun removeVideoFromFavorites(videoId: Int) {
+        pexelsDataSource.removeVideoFromFavorites(videoId)
+    }
+    override suspend fun isVideoFavorite(videoId: Int): Boolean {
+        return pexelsDataSource.isVideoFavorite(videoId)
+    }
+    override suspend fun getFavoritesVideos(): List<Videos> {
+        return pexelsDataSource.getFavoritesVideos()
     }
 }
-

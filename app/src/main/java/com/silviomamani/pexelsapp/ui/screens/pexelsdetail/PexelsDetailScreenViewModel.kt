@@ -49,7 +49,7 @@ class PexelsDetailScreenViewModel(
     private fun checkIfFavorite() {
         viewModelScope.launch {
             try {
-                val isFav = pexelsRepository.isFavorite(uiState.pexelsId)
+                val isFav = pexelsRepository.isFotoFavorite(uiState.pexelsId)
                 uiState = uiState.copy(isFavorito = isFav)
             } catch (e: Exception) {
                 Log.e("PexelsDetail", "Error al verificar favorito: ${e.message}")
@@ -62,12 +62,12 @@ class PexelsDetailScreenViewModel(
             try {
                 if (uiState.isFavorito) {
                     // Quitar de favoritos
-                    pexelsRepository.removeFromFavorites(uiState.pexelsId)
+                    pexelsRepository.removeFotoFromFavorites(uiState.pexelsId)
                     uiState = uiState.copy(isFavorito = false)
                     Log.d("PexelsDetail", "Foto eliminada de favoritos")
                 } else {
                     // Agregar a favoritos
-                    pexelsRepository.addToFavorites(uiState.pexelsDetail)
+                    pexelsRepository.addFotoToFavorites(uiState.pexelsDetail)
                     uiState = uiState.copy(isFavorito = true)
                     Log.d("PexelsDetail", "Foto agregada a favoritos")
                 }

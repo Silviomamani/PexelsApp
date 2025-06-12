@@ -115,73 +115,75 @@ class PexelsApiDataSource :IPexelsDataSource{
         }
     }
 
+    // ===============================
+    // FAVORITOS PARA FOTOS
+    // ===============================
 
-
-    override suspend fun addToFavorites(foto: Fotos) {
+    override suspend fun addFotoToFavorites(foto: Fotos) {
         val db = FirebaseFirestore.getInstance()
         val currentUser = FirebaseAuth.getInstance().currentUser
         val uid = currentUser?.uid ?: throw Exception("Usuario no logueado")
 
         val docRef = db.collection("usuarios")
             .document(uid)
-            .collection("favoritos")
+            .collection("favoritos_fotos")
             .document(foto.id.toString())
 
         try {
             docRef.set(foto).await()
             Log.d("PexelsApp", "Foto agregada a favoritos: ${foto.id}")
         } catch (e: Exception) {
-            Log.e("PexelsApp", "Error al agregar a favoritos: ${e.localizedMessage}")
+            Log.e("PexelsApp", "Error al agregar foto a favoritos: ${e.localizedMessage}")
             throw e
         }
     }
 
-    override suspend fun removeFromFavorites(fotoId: Int) {
+    override suspend fun removeFotoFromFavorites(fotoId: Int) {
         val db = FirebaseFirestore.getInstance()
         val currentUser = FirebaseAuth.getInstance().currentUser
         val uid = currentUser?.uid ?: throw Exception("Usuario no logueado")
 
         val docRef = db.collection("usuarios")
             .document(uid)
-            .collection("favoritos")
+            .collection("favoritos_fotos")
             .document(fotoId.toString())
 
         try {
             docRef.delete().await()
             Log.d("PexelsApp", "Foto eliminada de favoritos: $fotoId")
         } catch (e: Exception) {
-            Log.e("PexelsApp", "Error al eliminar de favoritos: ${e.localizedMessage}")
+            Log.e("PexelsApp", "Error al eliminar foto de favoritos: ${e.localizedMessage}")
             throw e
         }
     }
 
-    override suspend fun isFavorite(fotoId: Int): Boolean {
+    override suspend fun isFotoFavorite(fotoId: Int): Boolean {
         val db = FirebaseFirestore.getInstance()
         val currentUser = FirebaseAuth.getInstance().currentUser
         val uid = currentUser?.uid ?: return false
 
         val docRef = db.collection("usuarios")
             .document(uid)
-            .collection("favoritos")
+            .collection("favoritos_fotos")
             .document(fotoId.toString())
 
         return try {
             val document = docRef.get().await()
             document.exists()
         } catch (e: Exception) {
-            Log.e("PexelsApp", "Error al verificar favorito: ${e.localizedMessage}")
+            Log.e("PexelsApp", "Error al verificar foto favorita: ${e.localizedMessage}")
             false
         }
     }
 
-    override suspend fun getFavorites(): List<Fotos> {
+    override suspend fun getFavoritesFotos(): List<Fotos> {
         val db = FirebaseFirestore.getInstance()
         val currentUser = FirebaseAuth.getInstance().currentUser
         val uid = currentUser?.uid ?: return emptyList()
 
         val collectionRef = db.collection("usuarios")
             .document(uid)
-            .collection("favoritos")
+            .collection("favoritos_fotos")
 
         return try {
             val querySnapshot = collectionRef.get().await()
@@ -189,7 +191,88 @@ class PexelsApiDataSource :IPexelsDataSource{
                 document.toObject(Fotos::class.java)
             }
         } catch (e: Exception) {
-            Log.e("PexelsApp", "Error al obtener favoritos: ${e.localizedMessage}")
+            Log.e("PexelsApp", "Error al obtener fotos favoritas: ${e.localizedMessage}")
+            emptyList()
+        }
+    }
+
+    // ===============================
+    // FAVORITOS PARA VIDEOS
+    // ===============================
+
+    override suspend fun addVideoToFavorites(video: Videos) {
+        val db = FirebaseFirestore.getInstance()
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val uid = currentUser?.uid ?: throw Exception("Usuario no logueado")
+
+        val docRef = db.collection("usuarios")
+            .document(uid)
+            .collection("favoritos_videos")
+            .document(video.id.toString())
+
+        try {
+            docRef.set(video).await()
+            Log.d("PexelsApp", "Video agregado a favoritos: ${video.id}")
+        } catch (e: Exception) {
+            Log.e("PexelsApp", "Error al agregar video a favoritos: ${e.localizedMessage}")
+            throw e
+        }
+    }
+
+    override suspend fun removeVideoFromFavorites(videoId: Int) {
+        val db = FirebaseFirestore.getInstance()
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val uid = currentUser?.uid ?: throw Exception("Usuario no logueado")
+
+        val docRef = db.collection("usuarios")
+            .document(uid)
+            .collection("favoritos_videos")
+            .document(videoId.toString())
+
+        try {
+            docRef.delete().await()
+            Log.d("PexelsApp", "Video eliminado de favoritos: $videoId")
+        } catch (e: Exception) {
+            Log.e("PexelsApp", "Error al eliminar video de favoritos: ${e.localizedMessage}")
+            throw e
+        }
+    }
+
+    override suspend fun isVideoFavorite(videoId: Int): Boolean {
+        val db = FirebaseFirestore.getInstance()
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val uid = currentUser?.uid ?: return false
+
+        val docRef = db.collection("usuarios")
+            .document(uid)
+            .collection("favoritos_videos")
+            .document(videoId.toString())
+
+        return try {
+            val document = docRef.get().await()
+            document.exists()
+        } catch (e: Exception) {
+            Log.e("PexelsApp", "Error al verificar video favorito: ${e.localizedMessage}")
+            false
+        }
+    }
+
+    override suspend fun getFavoritesVideos(): List<Videos> {
+        val db = FirebaseFirestore.getInstance()
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val uid = currentUser?.uid ?: return emptyList()
+
+        val collectionRef = db.collection("usuarios")
+            .document(uid)
+            .collection("favoritos_videos")
+
+        return try {
+            val querySnapshot = collectionRef.get().await()
+            querySnapshot.documents.mapNotNull { document ->
+                document.toObject(Videos::class.java)
+            }
+        } catch (e: Exception) {
+            Log.e("PexelsApp", "Error al obtener videos favoritos: ${e.localizedMessage}")
             emptyList()
         }
     }

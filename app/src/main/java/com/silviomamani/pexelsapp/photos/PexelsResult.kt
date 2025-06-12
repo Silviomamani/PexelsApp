@@ -37,19 +37,19 @@ data class Videos(
     val id: Int = 0,
     val width: Int = 0,
     val height: Int = 0,
-    val duration: Int,
-    val user: User,
-    val image: String,
+    val duration: Int = 0,
+    val user: User = User(""),
+    val image: String = "",
     @SerializedName("video_files")
-    val videoFiles: List<VideoFile>
+    val videoFiles: List<VideoFile> = emptyList()
 
 )
 data class User(
-    val name: String,
+    val name: String = "",
 )
 data class VideoFile(
-    val id: Int,
-    val link: String,
+    val id: Int = 0,
+    val link: String = "",
 )
 
 typealias VideoDetailResult = Videos

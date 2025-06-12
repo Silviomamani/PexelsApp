@@ -1,6 +1,5 @@
 package com.silviomamani.pexelsapp.ui.screens.pexelsvideodetail
 
-
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
@@ -41,7 +40,9 @@ fun PexelsVideoDetailScreen(
         state.video != null -> {
             PexelsVideoUIItemDetail(
                 video = state.video,
+                isFavorito = state.isFavorito,
                 onBackClick = { navController.popBackStack() },
+                onFavoriteClick = { vm.toggleVideoFavorito() },
                 modifier = modifier
             )
         }

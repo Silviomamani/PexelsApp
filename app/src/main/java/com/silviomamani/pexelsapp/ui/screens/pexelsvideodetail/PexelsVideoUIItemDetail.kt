@@ -48,13 +48,14 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.silviomamani.pexelsapp.photos.Videos
 import com.silviomamani.pexelsapp.ui.screens.commons.BottomNavItem
-import com.silviomamani.pexelsapp.ui.screens.homescreen.Section
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PexelsVideoUIItemDetail(
     video: Videos,
+    isFavorito: Boolean,
     onBackClick: () -> Unit,
+    onFavoriteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -75,11 +76,11 @@ fun PexelsVideoUIItemDetail(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* lógica de favoritos */ }) {
+                    IconButton(onClick = onFavoriteClick) {
                         Icon(
-                            Icons.Default.FavoriteBorder,
-                            contentDescription = "Favorito",
-                            tint = Color(0xFF4A6741)
+                            if (isFavorito) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            contentDescription = if (isFavorito) "Quitar de favoritos" else "Agregar a favoritos",
+                            tint = if (isFavorito) Color.Red else Color(0xFF4A6741)
                         )
                     }
                 },
@@ -210,7 +211,6 @@ fun PexelsVideoUIItemDetail(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Botón de descarga
                 Button(
                     onClick = {
                         val uri = Uri.parse(videoFile.link)

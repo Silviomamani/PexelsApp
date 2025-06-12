@@ -100,12 +100,6 @@ fun LoginScreen(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Volver",
-                tint = Color.Black,
-                modifier = Modifier.size(24.dp)
-            )
         }
 
 
