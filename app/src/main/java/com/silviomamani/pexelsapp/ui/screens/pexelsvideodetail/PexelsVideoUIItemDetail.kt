@@ -46,7 +46,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import androidx.navigation.NavHostController
 import com.silviomamani.pexelsapp.photos.Videos
+import com.silviomamani.pexelsapp.ui.screens.Screens
 import com.silviomamani.pexelsapp.ui.screens.commons.BottomNavItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,7 +58,8 @@ fun PexelsVideoUIItemDetail(
     isFavorito: Boolean,
     onBackClick: () -> Unit,
     onFavoriteClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
 ) {
     val context = LocalContext.current
     val videoFile = video.videoFiles.firstOrNull { it.link.isNotEmpty() }
@@ -119,7 +122,7 @@ fun PexelsVideoUIItemDetail(
                         icon = Icons.Default.Upload,
                         label = "Subir",
                         isSelected = false,
-                        onClick = { }
+                        onClick = { navController.navigate(Screens.Update.route)}
                     )
                 }
             }

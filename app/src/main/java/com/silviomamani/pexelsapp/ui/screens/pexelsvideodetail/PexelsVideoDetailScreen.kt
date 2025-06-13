@@ -43,7 +43,8 @@ fun PexelsVideoDetailScreen(
                 isFavorito = state.isFavorito,
                 onBackClick = { navController.popBackStack() },
                 onFavoriteClick = { vm.toggleVideoFavorito() },
-                modifier = modifier
+                modifier = modifier ,
+                navController = navController
             )
         }
     }

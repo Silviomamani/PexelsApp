@@ -30,6 +30,8 @@ import androidx.compose.ui.draw.clip
 
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.silviomamani.pexelsapp.ui.screens.Screens
 import com.silviomamani.pexelsapp.ui.screens.commons.BottomNavItem
 import com.silviomamani.pexelsapp.ui.screens.homescreen.Section
 
@@ -37,6 +39,7 @@ import com.silviomamani.pexelsapp.ui.screens.homescreen.Section
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PexelsUIItemDetail(
+    navController: NavHostController,
     fotos: Fotos,
     isFavorito: Boolean,
     isDownloading: Boolean,
@@ -79,7 +82,7 @@ fun PexelsUIItemDetail(
                         icon = Icons.Default.Upload,
                         label = "Subir",
                         isSelected = false,
-                        onClick = { }
+                        onClick = { navController.navigate(Screens.Update.route)}
                     )
                 }
             }

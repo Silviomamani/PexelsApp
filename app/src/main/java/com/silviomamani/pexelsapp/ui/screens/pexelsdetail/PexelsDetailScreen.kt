@@ -41,8 +41,9 @@ fun PexelsDetailScreen(
             onToggleFavorito = { vm.toggleFavorito() },
             onBackClick = { navController.popBackStack() },
             onDownloadClick = { vm.downloadImage() },
-            modifier = modifier ,
-            onHomeClick = { navController.navigate("home")}
+            modifier = modifier,
+            onHomeClick = { navController.navigate("home") },
+            navController = navController
         )
     }
 }

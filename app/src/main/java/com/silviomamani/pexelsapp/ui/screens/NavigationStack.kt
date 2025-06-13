@@ -1,6 +1,7 @@
 package com.silviomamani.pexelsapp.ui.screens
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,6 +13,8 @@ import com.silviomamani.pexelsapp.ui.screens.pexelsdetail.PexelsDetailScreen
 import com.silviomamani.pexelsapp.ui.screens.pexelslist.PexelsListScreen
 import com.silviomamani.pexelsapp.ui.screens.pexelsvideodetail.PexelsVideoDetailScreen
 import com.silviomamani.pexelsapp.ui.screens.splash.SplashScreen
+import com.silviomamani.pexelsapp.ui.screens.updatescreen.UpdateScreen
+
 @Composable
 fun NavigationStack(
     onGoogleLoginClick: () -> Unit,
@@ -78,5 +81,12 @@ fun NavigationStack(
                 navController = navController
             )
         }
+        composable(route = Screens.Update.route) {
+            UpdateScreen(
+                homeViewModel = viewModel(),
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
     }
+
 }

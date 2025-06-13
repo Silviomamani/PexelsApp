@@ -337,22 +337,22 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 BottomNavItem(
-                    icon = Icons.Default.Home, // ← Cambiado
+                    icon = Icons.Default.Home,
                     label = "Inicio",
                     isSelected = true,
                     onClick = { }
                 )
                 BottomNavItem(
-                    icon = Icons.Default.Favorite, // ← Cambiado
+                    icon = Icons.Default.Favorite,
                     label = "Favoritos",
                     isSelected = false,
                     onClick = { homeViewModel.selectSection(Section.FAVORITES) }
                 )
                 BottomNavItem(
-                    icon = Icons.Default.Upload, // ← Cambiado
+                    icon = Icons.Default.Upload,
                     label = "Subir",
                     isSelected = false,
-                    onClick = { homeViewModel.selectSection(Section.UPLOAD) }
+                    onClick = { navController.navigate(Screens.Update.route) }
                 )
             }
         }
