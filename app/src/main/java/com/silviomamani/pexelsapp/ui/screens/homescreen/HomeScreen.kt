@@ -346,7 +346,7 @@ fun HomeScreen(
                     icon = Icons.Default.Favorite,
                     label = "Favoritos",
                     isSelected = false,
-                    onClick = { homeViewModel.selectSection(Section.FAVORITES) }
+                    onClick = { navController.navigate(Screens.Favorites.route) }
                 )
                 BottomNavItem(
                     icon = Icons.Default.Upload,

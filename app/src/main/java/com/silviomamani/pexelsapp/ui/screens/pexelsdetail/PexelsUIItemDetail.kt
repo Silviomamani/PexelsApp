@@ -10,13 +10,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Upload
-
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,13 +24,12 @@ import coil.compose.AsyncImage
 import com.silviomamani.pexelsapp.photos.Fotos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
-
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.silviomamani.pexelsapp.ui.screens.Screens
 import com.silviomamani.pexelsapp.ui.screens.commons.BottomNavItem
-import com.silviomamani.pexelsapp.ui.screens.homescreen.Section
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,7 +82,6 @@ fun PexelsUIItemDetail(
                     )
                 }
             }
-
 
 
         },

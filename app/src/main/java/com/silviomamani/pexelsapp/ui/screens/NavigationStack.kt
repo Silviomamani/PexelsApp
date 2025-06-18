@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.google.firebase.auth.FirebaseAuth
+import com.silviomamani.pexelsapp.ui.screens.favorites.FavoritesScreen
 import com.silviomamani.pexelsapp.ui.screens.register.RegisterScreen
 import com.silviomamani.pexelsapp.ui.screens.homescreen.HomeScreen
 import com.silviomamani.pexelsapp.ui.screens.login.LoginScreen
@@ -86,6 +87,10 @@ fun NavigationStack(
                 homeViewModel = viewModel(),
                 onNavigateBack = { navController.popBackStack() }
             )
+        }
+
+        composable(route = Screens.Favorites.route) {
+            FavoritesScreen(navController = navController)
         }
     }
 
