@@ -10,6 +10,7 @@ import com.silviomamani.pexelsapp.ui.screens.favorites.FavoritesScreen
 import com.silviomamani.pexelsapp.ui.screens.register.RegisterScreen
 import com.silviomamani.pexelsapp.ui.screens.homescreen.HomeScreen
 import com.silviomamani.pexelsapp.ui.screens.login.LoginScreen
+import com.silviomamani.pexelsapp.ui.screens.perfil.PerfilScreen
 import com.silviomamani.pexelsapp.ui.screens.pexelsdetail.PexelsDetailScreen
 import com.silviomamani.pexelsapp.ui.screens.pexelslist.PexelsListScreen
 import com.silviomamani.pexelsapp.ui.screens.pexelsvideodetail.PexelsVideoDetailScreen
@@ -56,7 +57,6 @@ fun NavigationStack(
         composable(route = Screens.Home.route) {
             HomeScreen(
                 navController = navController,
-                userName = FirebaseAuth.getInstance().currentUser?.displayName ?: "Usuario",
                 onLogoutClick = onLogoutClick
             )
         }
@@ -92,6 +92,14 @@ fun NavigationStack(
         composable(route = Screens.Favorites.route) {
             FavoritesScreen(navController = navController)
         }
+
+        composable(route = Screens.Perfil.route) {
+            PerfilScreen(
+                navController = navController,
+                onLogoutClick = onLogoutClick
+            )
+        }
     }
+
 
 }

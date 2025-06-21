@@ -1,6 +1,6 @@
 package com.silviomamani.pexelsapp.ui.screens.homescreen
 
-import androidx.compose.foundation.Image
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -20,24 +19,18 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -49,36 +42,40 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
-import com.silviomamani.pexelsapp.photos.Fotos
-import com.silviomamani.pexelsapp.photos.Videos
+import com.google.firebase.auth.FirebaseAuth
 import com.silviomamani.pexelsapp.ui.screens.Screens
 import com.silviomamani.pexelsapp.ui.screens.commons.BottomNavItem
-import com.silviomamani.pexelsapp.ui.screens.commons.PexelsItem
-import com.silviomamani.pexelsapp.ui.screens.commons.PexelsUIList
 import com.silviomamani.pexelsapp.ui.screens.commons.PhotoCard
-import com.silviomamani.pexelsapp.ui.screens.commons.SearchType
 import com.silviomamani.pexelsapp.ui.screens.commons.VideoCard
 import com.silviomamani.pexelsapp.ui.screens.pexelslist.PexelsListScreenViewModel
-
 
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    userName: String,
     onLogoutClick: () -> Unit,
     photoViewModel: PexelsListScreenViewModel = viewModel(),
     homeViewModel: HomeScreenViewModel = viewModel()
 ) {
     val state by homeViewModel.state.collectAsState()
+    val context = LocalContext.current
+
+    // Estado para el nombre personalizado
+    var displayedName by remember { mutableStateOf("") }
+
+    // Cargar el nombre personalizado desde SharedPreferences
+    LaunchedEffect(Unit) {
+        val sharedPreferences = context.getSharedPreferences("perfil_prefs", Context.MODE_PRIVATE)
+        val savedDisplayName = sharedPreferences.getString("display_name", "") ?: ""
+        val originalName = FirebaseAuth.getInstance().currentUser?.displayName ?: "Usuario"
+
+        displayedName = if (savedDisplayName.isNotEmpty()) savedDisplayName else originalName
+    }
 
     LaunchedEffect(state.selectedSection) {
         when (state.selectedSection) {
@@ -123,20 +120,11 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = userName,
+                    text = displayedName, // Usar el nombre personalizado
                     color = Color.White,
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
-                Button(
-                    onClick = onLogoutClick,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.White.copy(alpha = 0.9f),
-                        contentColor = Color.Black
-                    )
-                ) {
-                    Text("Cerrar Sesion")
-                }
             }
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -170,7 +158,7 @@ fun HomeScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Menu, // ← Cambiado
+                        imageVector = Icons.Default.Menu,
                         contentDescription = null,
                         tint = Color.Gray
                     )
@@ -181,7 +169,7 @@ fun HomeScreen(
                         modifier = Modifier.weight(1f)
                     )
                     Icon(
-                        imageVector = Icons.Default.Search, // ← Cambiado
+                        imageVector = Icons.Default.Search,
                         contentDescription = null,
                         tint = Color.Gray
                     )
@@ -349,10 +337,10 @@ fun HomeScreen(
                     onClick = { navController.navigate(Screens.Favorites.route) }
                 )
                 BottomNavItem(
-                    icon = Icons.Default.Upload,
-                    label = "Subir",
+                    icon = Icons.Default.Person,
+                    label = "Perfil",
                     isSelected = false,
-                    onClick = { navController.navigate(Screens.Update.route) }
+                    onClick = { navController.navigate(Screens.Perfil.route) }
                 )
             }
         }

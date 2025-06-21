@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -110,19 +111,19 @@ fun PexelsVideoUIItemDetail(
                         icon = Icons.Default.Home,
                         label = "Inicio",
                         isSelected = true,
-                        onClick = { }
+                        onClick = { navController.navigate(Screens.Home.route)}
                     )
                     BottomNavItem(
                         icon = Icons.Default.Favorite,
                         label = "Favoritos",
                         isSelected = false,
-                        onClick = {  }
+                        onClick = {navController.navigate(Screens.Favorites.route) }
                     )
                     BottomNavItem(
-                        icon = Icons.Default.Upload,
-                        label = "Subir",
+                        icon = Icons.Default.Person,
+                        label = "Perfil",
                         isSelected = false,
-                        onClick = { navController.navigate(Screens.Update.route)}
+                        onClick = {navController.navigate(Screens.Perfil.route)}
                     )
                 }
             }
