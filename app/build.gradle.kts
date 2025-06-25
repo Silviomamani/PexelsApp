@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services")
+    kotlin("kapt")
 }
 
 android {
@@ -73,6 +74,15 @@ dependencies {
     implementation(libs.androidx.media3.ui)
     implementation(libs.facebook.login)
     implementation(libs.facebook.android.sdk)
+    implementation(libs.androidx.room.common)
+    implementation(libs.androidx.room.compiler){
+        exclude(group = "com.intellij",module = "annotations")
+    }
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.migration)
+    implementation(libs.androidx.room.runtime){
+        exclude(group = "com.intellij",module = "annotations")
+    }
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -82,5 +92,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("androidx.media3:media3-exoplayer:1.3.1")
     implementation("androidx.media3:media3-ui:1.3.1")
+    kapt(libs.androidx.room.compiler)
 
 }

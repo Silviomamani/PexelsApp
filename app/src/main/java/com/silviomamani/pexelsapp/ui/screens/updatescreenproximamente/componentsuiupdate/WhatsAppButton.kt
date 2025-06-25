@@ -1,4 +1,4 @@
-package com.silviomamani.pexelsapp.ui.screens.updatescreen.componentsuiupdate
+package com.silviomamani.pexelsapp.ui.screens.updatescreenproximamente.componentsuiupdate
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height

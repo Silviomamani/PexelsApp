@@ -16,6 +16,8 @@ data class Fotos(
     val src: ImagesJpg = ImagesJpg((""), (""))
 
 )
+
+
 data class ImagesJpg(
     val original: String = (""),
     val medium : String = ("")

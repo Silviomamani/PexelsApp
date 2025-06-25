@@ -1,4 +1,4 @@
-package com.silviomamani.pexelsapp.ui.screens.updatescreen
+package com.silviomamani.pexelsapp.ui.screens.updatescreenproximamente
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,14 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.silviomamani.pexelsapp.ui.screens.homescreen.HomeScreenViewModel
 import com.silviomamani.pexelsapp.ui.screens.homescreen.Section
-import com.silviomamani.pexelsapp.ui.screens.updatescreen.componentsuiupdate.ContactDialog
-import com.silviomamani.pexelsapp.ui.screens.updatescreen.componentsuiupdate.UpdateBottomNavigation
-import com.silviomamani.pexelsapp.ui.screens.updatescreen.componentsuiupdate.UpdateContactCard
-import com.silviomamani.pexelsapp.ui.screens.updatescreen.componentsuiupdate.UpdateScreenHeader
-import com.silviomamani.pexelsapp.ui.screens.updatescreen.componentsuiupdate.WhatsAppButton
+import com.silviomamani.pexelsapp.ui.screens.updatescreenproximamente.componentsuiupdate.ContactDialog
+import com.silviomamani.pexelsapp.ui.screens.updatescreenproximamente.componentsuiupdate.UpdateBottomNavigation
+import com.silviomamani.pexelsapp.ui.screens.updatescreenproximamente.componentsuiupdate.UpdateContactCard
+import com.silviomamani.pexelsapp.ui.screens.updatescreenproximamente.componentsuiupdate.UpdateScreenHeader
+import com.silviomamani.pexelsapp.ui.screens.updatescreenproximamente.componentsuiupdate.WhatsAppButton
 
 @Composable
 fun UpdateScreen(

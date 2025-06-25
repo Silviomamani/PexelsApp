@@ -1,4 +1,4 @@
-package com.silviomamani.pexelsapp.ui.screens.updatescreen.componentsuiupdate
+package com.silviomamani.pexelsapp.ui.screens.updatescreenproximamente.componentsuiupdate
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.silviomamani.pexelsapp.ui.screens.commons.BottomNavItem
-import com.silviomamani.pexelsapp.ui.screens.homescreen.Section
 
 @Composable
 fun UpdateBottomNavigation(

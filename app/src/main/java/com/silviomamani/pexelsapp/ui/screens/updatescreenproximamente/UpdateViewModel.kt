@@ -1,4 +1,4 @@
-package com.silviomamani.pexelsapp.ui.screens.updatescreen
+package com.silviomamani.pexelsapp.ui.screens.updatescreenproximamente
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -1,6 +1,6 @@
 package com.silviomamani.pexelsapp.ui.screens.splash
 
-import android.window.SplashScreen
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,10 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.filled.PhotoCamera
-import androidx.compose.runtime.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,13 +31,13 @@ fun SplashScreen(
 ){
     // Lanzar efecto al entrar a la pantalla
     LaunchedEffect(Unit) {
-        delay(2000) // Espera 2 segundos
+        delay(2000)
         navController.navigate(Screens.Login.route) {
-            popUpTo("splash") { inclusive = true } // Elimina splash del backstack
+            popUpTo("splash") { inclusive = true }
         }
     }
 
-    // UI del splash
+
     Box(
         modifier = modifier
             .fillMaxSize()

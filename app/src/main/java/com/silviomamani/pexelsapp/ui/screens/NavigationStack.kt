@@ -5,7 +5,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.google.firebase.auth.FirebaseAuth
 import com.silviomamani.pexelsapp.ui.screens.favorites.FavoritesScreen
 import com.silviomamani.pexelsapp.ui.screens.register.RegisterScreen
 import com.silviomamani.pexelsapp.ui.screens.homescreen.HomeScreen
@@ -15,7 +14,7 @@ import com.silviomamani.pexelsapp.ui.screens.pexelsdetail.PexelsDetailScreen
 import com.silviomamani.pexelsapp.ui.screens.pexelslist.PexelsListScreen
 import com.silviomamani.pexelsapp.ui.screens.pexelsvideodetail.PexelsVideoDetailScreen
 import com.silviomamani.pexelsapp.ui.screens.splash.SplashScreen
-import com.silviomamani.pexelsapp.ui.screens.updatescreen.UpdateScreen
+import com.silviomamani.pexelsapp.ui.screens.updatescreenproximamente.UpdateScreen
 
 @Composable
 fun NavigationStack(

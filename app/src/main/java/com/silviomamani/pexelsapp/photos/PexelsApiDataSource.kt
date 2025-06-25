@@ -7,6 +7,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.silviomamani.pexelsapp.network.AuthInterceptor
+import com.silviomamani.pexelsapp.photos.local.PexelsDatabaseProvider
+import com.silviomamani.pexelsapp.photos.local.toExternal
+import com.silviomamani.pexelsapp.photos.local.toLocal
 import kotlinx.coroutines.tasks.await
 import okhttp3.OkHttpClient
 import retrofit2.HttpException
@@ -38,7 +41,7 @@ class PexelsApiDataSource :IPexelsDataSource{
         Log.d("PexelsApp", "PexelsApiDataSource.getPexelsVideoList")
         return try {
             val pexelsResultVideos = RetrofitInstanceVideo.pexelsVideoApi.getVideosSearch(search)
-            return pexelsResultVideos.videos // O como se llame el campo del JSON que contiene la lista
+            return pexelsResultVideos.videos
         } catch (e: HttpException) {
             Log.e("PexelsApp", "HTTP error: ${e.code()} ${e.localizedMessage}")
             emptyList()
@@ -60,6 +63,18 @@ class PexelsApiDataSource :IPexelsDataSource{
         }
     }
     override suspend fun getPexelsById(pexelsId: Int): Fotos {
+      //var foto = RetrofitInstance.pexelsApi.getFoto(pexelsId)
+     // val dbLocal = PexelsDatabaseProvider.dbLocal
+     // var fotosLocal = dbLocal.pexelsDao().findByIdFoto(pexelsId)
+
+     // if (fotosLocal != null){
+     //     Log.d("FOTOSDB", "encontrado en la room")
+    //      return fotosLocal.toExternal()
+     // }
+     // else {
+    //      val fotosLocal = foto.toLocal()
+     //     dbLocal.pexelsDao().insertFoto(fotosLocal)
+    //  }
         return RetrofitInstance.pexelsApi.getFoto(pexelsId)
     }
 

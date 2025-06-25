@@ -31,6 +31,8 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.silviomamani.pexelsapp.photos.local.PexelsDatabaseProvider
+import com.silviomamani.pexelsapp.photos.local.PexelsLocalDatabase
 import com.silviomamani.pexelsapp.ui.screens.NavigationStack
 import com.silviomamani.pexelsapp.ui.screens.Screens
 import com.silviomamani.pexelsapp.ui.theme.PexelsAppTheme
@@ -43,6 +45,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+    //    PexelsDatabaseProvider.createDatabase(this)
 
         // Inicializar Firebase
         FirebaseApp.initializeApp(this)
