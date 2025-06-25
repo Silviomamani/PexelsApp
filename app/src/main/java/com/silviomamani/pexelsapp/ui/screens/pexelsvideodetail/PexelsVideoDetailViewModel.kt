@@ -23,7 +23,8 @@ class PexelsVideoDetailViewModel(
             try {
                 val video = pexelsRepository.getVideoById(videoId)
                 uiState = uiState.copy(video = video, isLoading = false)
-                // Verificar si es favorito después de cargar el video
+
+
                 checkIfVideoFavorite()
             } catch (e: Exception) {
                 uiState = uiState.copy(

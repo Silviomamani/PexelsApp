@@ -5,8 +5,6 @@ import com.google.gson.annotations.SerializedName
 data class PexelsResult (
     val photos: List<Fotos>
 )
-
-
 data class Fotos(
     val id: Int = 0,
     val photographer: String = "",

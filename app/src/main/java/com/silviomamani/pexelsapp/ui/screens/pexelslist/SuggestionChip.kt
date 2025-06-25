@@ -31,7 +31,7 @@ fun SuggestionChip(
             .fillMaxWidth()
             .clickable { onClick() },
         shape = RoundedCornerShape(20.dp),
-        color = Color(0xFFD8E8D8), // Color verde más claro para los chips
+        color = Color(0xFFD8E8D8),
         border = BorderStroke(1.dp, Color(0xFFB8D8B8))
     ) {
         Row(

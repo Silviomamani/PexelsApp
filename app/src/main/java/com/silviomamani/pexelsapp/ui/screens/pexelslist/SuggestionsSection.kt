@@ -33,7 +33,7 @@ fun SuggestionsSection(
             modifier = Modifier.padding(bottom = 12.dp)
         )
 
-        // Grid de sugerencias como chips
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
