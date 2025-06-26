@@ -1,15 +1,15 @@
 package com.silviomamani.pexelsapp.photos.local
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Entity("videos")
-data class PexelsLocalVideos(
-    val id: Int = 0,
+data class VideosLocal(
+    @PrimaryKey val id: Int = 0,
     val width: Int = 0,
     val height: Int = 0,
     val duration: Int = 0,
-    val user : String = "",
+    val userName: String = "",
     val image: String = "",
-    val videoUrl: String = ""
-
+    val videoFilesJson: String = ""
 )

@@ -11,6 +11,6 @@ data class PexelsLocal(
     val alt: String = "",
     val width: Int = 0,
     val height: Int = 0,
-    val imageUrl : String = ""
-    )
-
+    val imageUrl: String = "",
+    val mediumUrl: String = ""
+)

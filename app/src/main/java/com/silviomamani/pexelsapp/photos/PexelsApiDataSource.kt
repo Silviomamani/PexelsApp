@@ -54,30 +54,83 @@ class PexelsApiDataSource :IPexelsDataSource{
         }
     }
 
+
+
     override suspend fun getVideoById(videoId: Int): Videos {
+        Log.d("PexelsApp", "PexelsApiDataSource.getVideoById - Buscando video ID: $videoId")
+
         return try {
-            RetrofitInstanceVideo.pexelsVideoApi.getVideoById(videoId)
+            val dbLocal = PexelsDatabaseProvider.dbLocal
+
+
+            val videoLocal = dbLocal.videosDao().findByIdVideo(videoId)
+
+            if (videoLocal != null) {
+                Log.d("VIDEOSDB", "Video encontrado en Room - ID: $videoId")
+                return videoLocal.toExternal()
+            } else {
+                Log.d("VIDEOSDB", "Video no encontrado en Room, consultando API - ID: $videoId")
+
+
+                val video = RetrofitInstanceVideo.pexelsVideoApi.getVideoById(videoId)
+
+
+                val videoLocal = video.toLocal()
+                dbLocal.videosDao().insertVideo(videoLocal)
+
+                Log.d("VIDEOSDB", "Video guardado en Room - ID: $videoId")
+
+                return video
+            }
+        } catch (e: HttpException) {
+            Log.e("PexelsApp", "HTTP error al obtener video por ID: ${e.code()} ${e.localizedMessage}")
+            throw e
+        } catch (e: IOException) {
+            Log.e("PexelsApp", "Network error al obtener video por ID: ${e.localizedMessage}")
+            throw e
         } catch (e: Exception) {
-            Log.e("PexelsApp", "Error al obtener video por ID: ${e.localizedMessage}")
+            Log.e("PexelsApp", "Error inesperado al obtener video por ID: ${e.localizedMessage}")
             throw e
         }
     }
+
     override suspend fun getPexelsById(pexelsId: Int): Fotos {
-      //var foto = RetrofitInstance.pexelsApi.getFoto(pexelsId)
-     // val dbLocal = PexelsDatabaseProvider.dbLocal
-     // var fotosLocal = dbLocal.pexelsDao().findByIdFoto(pexelsId)
+        Log.d("PexelsApp", "PexelsApiDataSource.getPexelsById - Buscando foto ID: $pexelsId")
 
-     // if (fotosLocal != null){
-     //     Log.d("FOTOSDB", "encontrado en la room")
-    //      return fotosLocal.toExternal()
-     // }
-     // else {
-    //      val fotosLocal = foto.toLocal()
-     //     dbLocal.pexelsDao().insertFoto(fotosLocal)
-    //  }
-        return RetrofitInstance.pexelsApi.getFoto(pexelsId)
+        return try {
+            val dbLocal = PexelsDatabaseProvider.dbLocal
+
+
+            val fotosLocal = dbLocal.pexelsDao().findByIdFoto(pexelsId)
+
+            if (fotosLocal != null) {
+                Log.d("FOTOSDB", "Foto encontrada en Room - ID: $pexelsId")
+                return fotosLocal.toExternal()
+            } else {
+                Log.d("FOTOSDB", "Foto no encontrada en Room, consultando API - ID: $pexelsId")
+
+
+                val foto = RetrofitInstance.pexelsApi.getFoto(pexelsId)
+
+
+                val fotoLocal = foto.toLocal()
+                dbLocal.pexelsDao().insertFoto(fotoLocal)
+
+                Log.d("FOTOSDB", "Foto guardada en Room - ID: $pexelsId")
+
+                return foto
+            }
+        } catch (e: HttpException) {
+            Log.e("PexelsApp", "HTTP error al obtener foto por ID: ${e.code()} ${e.localizedMessage}")
+            throw e
+        } catch (e: IOException) {
+            Log.e("PexelsApp", "Network error al obtener foto por ID: ${e.localizedMessage}")
+            throw e
+        } catch (e: Exception) {
+            Log.e("PexelsApp", "Error inesperado al obtener foto por ID: ${e.localizedMessage}")
+            throw e
+        }
     }
-
 
     override suspend fun getPopularFotos(): List<Fotos> {
         Log.d("PexelsApp", "PexelsApiDataSource.getPopularFotos")

@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-    //    PexelsDatabaseProvider.createDatabase(this)
+        PexelsDatabaseProvider.createDatabase(this)
 
         // Inicializar Firebase
         FirebaseApp.initializeApp(this)

@@ -27,6 +27,9 @@ typealias FotoDetailResult = Fotos
 fun emptyFotos(): Fotos{
     return Fotos(0,"","",0,0,ImagesJpg("", ""))
 }
+fun emptyVideos(): Videos {
+    return Videos(0, 0, 0, 0, User(""), "", emptyList())
+}
 
 //Video
 

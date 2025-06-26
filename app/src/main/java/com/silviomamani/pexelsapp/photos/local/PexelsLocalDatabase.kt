@@ -10,13 +10,14 @@ import kotlinx.coroutines.launch
 
 
 @Database(
-    entities = [PexelsLocal::class],
-    version = 2,
+    entities = [PexelsLocal::class, VideosLocal::class],
+    version = 4,
     exportSchema = false
 )
 abstract class PexelsLocalDatabase: RoomDatabase() {
 
     abstract fun pexelsDao(): IPexelsDao
+    abstract fun videosDao(): IVideosDao
 
     companion object {
         @Volatile
