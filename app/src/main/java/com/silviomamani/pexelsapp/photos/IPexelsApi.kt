@@ -34,15 +34,18 @@ interface IPexelsApi {
         @Query("per_page") perPage: Int = 15
     ): PexelsVideoResult
 
-    @GET("popular")
+    @GET("curated")
     suspend fun getPopularFotos(
-        @Query("per_page") perPage: Int = 12
+        @Query("per_page") perPage: Int = 12,
+        @Query("page") page: Int = 1
     ): PexelsResult
+
 
     @GET("curated")
     suspend fun getMostViewed(
-        @Query("per_page") perPage: Int = 12
-    ):PexelsResult
+        @Query("per_page") perPage: Int = 12,
+        @Query("page") page: Int = 2
+    ): PexelsResult
 }
 
 
